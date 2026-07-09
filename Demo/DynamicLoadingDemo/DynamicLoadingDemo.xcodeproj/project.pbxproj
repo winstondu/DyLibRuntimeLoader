@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A694B0F2AA3354A00EA3BF9 /* AnimalImplementation.xcframework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5A694B0E2AA3354A00EA3BF9 /* AnimalImplementation.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A6DB02C2A9F1E1F00E87643 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6DB02B2A9F1E1F00E87643 /* AppDelegate.swift */; };
 		5A6DB02E2A9F1E1F00E87643 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6DB02D2A9F1E1F00E87643 /* SceneDelegate.swift */; };
 		5A6DB0302A9F1E1F00E87643 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6DB02F2A9F1E1F00E87643 /* ViewController.swift */; };
@@ -15,8 +14,8 @@
 		5A6DB0352A9F1E2100E87643 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A6DB0342A9F1E2100E87643 /* Assets.xcassets */; };
 		5A6DB0382A9F1E2100E87643 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A6DB0362A9F1E2100E87643 /* LaunchScreen.storyboard */; };
 		5A6DB0442A9F1E5500E87643 /* AnimalInterface in Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0432A9F1E5500E87643 /* AnimalInterface */; };
-		5A6DB0462A9F1E5B00E87643 /* DyLibRuntimeLoader in Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0452A9F1E5B00E87643 /* DyLibRuntimeLoader */; };
-		5A6DB0472A9F1E5B00E87643 /* DyLibRuntimeLoader in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0452A9F1E5B00E87643 /* DyLibRuntimeLoader */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		5A6DB0462A9F1E5B00E87643 /* DyLibPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0452A9F1E5B00E87643 /* DyLibPlugin */; };
+		5A6DB0472A9F1E5B00E87643 /* DyLibPlugin in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0452A9F1E5B00E87643 /* DyLibPlugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5AC3E0112A9F216B00BBD9F9 /* AnimalInterface in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0432A9F1E5500E87643 /* AnimalInterface */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -28,7 +27,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				5AC3E0112A9F216B00BBD9F9 /* AnimalInterface in Embed Frameworks */,
-				5A6DB0472A9F1E5B00E87643 /* DyLibRuntimeLoader in Embed Frameworks */,
+				5A6DB0472A9F1E5B00E87643 /* DyLibPlugin in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -39,15 +38,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5A694B0F2AA3354A00EA3BF9 /* AnimalImplementation.xcframework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5A694B0C2AA332D800EA3BF9 /* AnimalImplementation.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = AnimalImplementation.xcframework; path = ../Animals/Cat/AnimalImplementation.xcframework; sourceTree = "<group>"; };
-		5A694B0E2AA3354A00EA3BF9 /* AnimalImplementation.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = AnimalImplementation.xcframework; path = ../Animals/Dog/AnimalImplementation.xcframework; sourceTree = "<group>"; };
 		5A6DB0282A9F1E1F00E87643 /* DynamicLoadingDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DynamicLoadingDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A6DB02B2A9F1E1F00E87643 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5A6DB02D2A9F1E1F00E87643 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -58,8 +54,6 @@
 		5A6DB0392A9F1E2100E87643 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A6DB0402A9F1E3100E87643 /* AnimalInterface */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AnimalInterface; path = ../Animals/AnimalInterface; sourceTree = "<group>"; };
 		5A6DB0412A9F1E4A00E87643 /* DyLibRuntimeLoader */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DyLibRuntimeLoader; path = ../..; sourceTree = "<group>"; };
-		5A87A9D52AA2F775009D97BF /* AnimalImplementation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AnimalImplementation.framework; path = "../Animals/Dog/AnimalImplementation.xcframework/ios-arm64/AnimalImplementation.framework"; sourceTree = "<group>"; };
-		5A87A9D72AA2F7EF009D97BF /* AnimalImplementation.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = AnimalImplementation.xcframework; path = ../Animals/Dog/AnimalImplementation.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +62,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A6DB0442A9F1E5500E87643 /* AnimalInterface in Frameworks */,
-				5A6DB0462A9F1E5B00E87643 /* DyLibRuntimeLoader in Frameworks */,
+				5A6DB0462A9F1E5B00E87643 /* DyLibPlugin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,10 +72,6 @@
 		5A6DB01F2A9F1E1F00E87643 = {
 			isa = PBXGroup;
 			children = (
-				5A87A9D72AA2F7EF009D97BF /* AnimalImplementation.xcframework */,
-				5A694B0C2AA332D800EA3BF9 /* AnimalImplementation.xcframework */,
-				5A694B0E2AA3354A00EA3BF9 /* AnimalImplementation.xcframework */,
-				5A87A9D52AA2F775009D97BF /* AnimalImplementation.framework */,
 				5A6DB03F2A9F1E3100E87643 /* Packages */,
 				5A6DB02A2A9F1E1F00E87643 /* DynamicLoadingDemo */,
 				5A6DB0292A9F1E1F00E87643 /* Products */,
@@ -147,7 +137,7 @@
 			name = DynamicLoadingDemo;
 			packageProductDependencies = (
 				5A6DB0432A9F1E5500E87643 /* AnimalInterface */,
-				5A6DB0452A9F1E5B00E87643 /* DyLibRuntimeLoader */,
+				5A6DB0452A9F1E5B00E87643 /* DyLibPlugin */,
 			);
 			productName = DynamicLoadingDemo;
 			productReference = 5A6DB0282A9F1E1F00E87643 /* DynamicLoadingDemo.app */;
@@ -432,9 +422,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = AnimalInterface;
 		};
-		5A6DB0452A9F1E5B00E87643 /* DyLibRuntimeLoader */ = {
+		5A6DB0452A9F1E5B00E87643 /* DyLibPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = DyLibRuntimeLoader;
+			productName = DyLibPlugin;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

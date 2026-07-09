@@ -3,22 +3,22 @@
 import PackageDescription
 
 let package = Package(
-    name: "AnimalInterface",
+    name: "ToolkitInterface",
     platforms: [.iOS(.v16), .macOS(.v13)],
     products: [
         // Interface modules must be dynamic so host and plugins share one
         // copy of the protocol metadata.
         .library(
-            name: "AnimalInterface",
+            name: "ToolkitInterface",
             type: .dynamic,
-            targets: ["AnimalInterface"])
+            targets: ["ToolkitInterface"])
     ],
     dependencies: [
         .package(path: "../../..")
     ],
     targets: [
         .target(
-            name: "AnimalInterface",
+            name: "ToolkitInterface",
             dependencies: [
                 .product(name: "DyLibPlugin", package: "DyLibRuntimeLoader")
             ])

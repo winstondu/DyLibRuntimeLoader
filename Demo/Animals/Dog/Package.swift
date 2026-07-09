@@ -1,23 +1,29 @@
-// swift-tools-version: 5.7
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version: 6.0
 
 import PackageDescription
 
 let package = Package(
-    name: "AnimalImplementation",
-    platforms: [.iOS(.v11)],
+    name: "DogPlugin",
+    platforms: [.iOS(.v16), .macOS(.v13)],
     products: [
+        // Plugin binaries must be dynamic so the host can dlopen them.
         .library(
-            name: "AnimalImplementation",
+            name: "DogPlugin",
             type: .dynamic,
-            targets: ["AnimalImplementation"]),
+            targets: ["DogPlugin"])
     ],
     dependencies: [
         .package(path: "../AnimalInterface"),
-        .package(path: "../../..")
+        .package(path: "../ToolkitInterface"),
+        .package(path: "../../.."),
     ],
     targets: [
         .target(
-            name: "AnimalImplementation", dependencies: ["AnimalInterface", "DyLibRuntimeLoader"]),
+            name: "DogPlugin",
+            dependencies: [
+                "AnimalInterface",
+                "ToolkitInterface",
+                .product(name: "DyLibPlugin", package: "DyLibRuntimeLoader"),
+            ])
     ]
 )

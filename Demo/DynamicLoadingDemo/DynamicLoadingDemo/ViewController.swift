@@ -1,42 +1,32 @@
-//
-//  ViewController.swift
-//  DynamicLoadingDemo
-//
-//  Created by Duy Quang Dao on 30/8/23.
-//
-
-import UIKit
 import AnimalInterface
-import DyLibRuntimeLoader
+import DyLibPlugin
+import UIKit
 
 class ViewController: UIViewController {
 
-    var animal: Animal!
+    private let manager = PluginManager()
+    private var animal: Animal?
 
     @IBOutlet var lbl: UILabel!
 
     @IBAction func load(sender: UIButton) {
         do {
-            // Dynamic load framework first then load class from string
-            try dyLibLoad(fromFramework: .framework(name: "AnimalImplementation"))
-            if let dog = NSClassFromString("AnimalImplementation.Dog") as? AnimalClass.Type {
-                animal = dog.init()
-            } else if let cat = NSClassFromString("AnimalImplementation.Cat") as? AnimalClass.Type {
-                animal = cat.init()
-            } else {
-                show(title: "Error", message: "AnimalImplementation Classes are not found")
-            }
-
-            // Load instance directly from symbol
-//             animal = try dyLibLoad(withSymbol: "load_animal", fromFramework: .framework(name: "AnimalImplementation"), forType: Animal.self)
-            show(title: "Success", message: "Animal implementation is loaded")
+            try manager.discoverPlugins()
+            try manager.activateAll()
+            animal = try manager.instance(of: AnimalContract.self)
+            let plugins = manager.registeredManifests
+                .map { "\($0.id) \($0.version)" }
+                .joined(separator: "\n")
+            show(title: "Success", message: "Activated plugins:\n\(plugins)")
+        } catch let error as PluginError {
+            show(title: "Error", message: error.description)
         } catch {
             show(title: "Error", message: error.localizedDescription)
         }
     }
 
     @IBAction func speak(sender: UIButton) {
-        show(title: "animal.speak()", message: animal.speak())
+        show(title: "animal.speak()", message: animal?.speak() ?? "Load a plugin first")
     }
 
     override func viewDidLoad() {
@@ -50,4 +40,3 @@ class ViewController: UIViewController {
         present(alert, animated: true)
     }
 }
-

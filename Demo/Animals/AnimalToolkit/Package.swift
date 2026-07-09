@@ -3,24 +3,24 @@
 import PackageDescription
 
 let package = Package(
-    name: "CatPlugin",
+    name: "AnimalToolkit",
     platforms: [.iOS(.v16), .macOS(.v13)],
     products: [
         // Plugin binaries must be dynamic so the host can dlopen them.
         .library(
-            name: "CatPlugin",
+            name: "AnimalToolkit",
             type: .dynamic,
-            targets: ["CatPlugin"])
+            targets: ["AnimalToolkit"])
     ],
     dependencies: [
-        .package(path: "../AnimalInterface"),
+        .package(path: "../ToolkitInterface"),
         .package(path: "../../.."),
     ],
     targets: [
         .target(
-            name: "CatPlugin",
+            name: "AnimalToolkit",
             dependencies: [
-                "AnimalInterface",
+                "ToolkitInterface",
                 .product(name: "DyLibPlugin", package: "DyLibRuntimeLoader"),
             ])
     ]
