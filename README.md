@@ -8,6 +8,17 @@ A type-safe runtime plugin system for iOS, built on `dlopen` and powered by Swif
 > **Breaking change**
 > Version 2.0 is a clean break from the old string-based API (`dyLibCreator` / `dyLibLoad(withSymbol:fromFramework:forType:)`). The module is now `DyLibPlugin` (the package name stays `DyLibRuntimeLoader`). See [Migration from 1.x](#migration-from-1x).
 
+## Why dynamic loading?
+
+Static and dynamic *linking* are the two options Xcode offers, and both make dyld resolve every framework **before `main()` runs**. Dynamic *loading* is the third mechanism — the one iOS doesn't surface in the UI but fully supports through POSIX `dlopen` — and it changes when and whether code enters your process at all:
+
+- **Launch time.** Every dynamically linked framework is mapped, rebased, and bound during app launch, whether or not this session ever uses it. Loading feature modules on demand moves that cost off the launch path entirely. This is the architecture Meta describes in [The evolution of Facebook's iOS app architecture](https://engineering.fb.com/2023/02/06/ios/facebook-ios-app-architecture/): the app starts with lean interface modules and pulls concrete implementations in at runtime.
+- **True implementation hiding.** A plugin ships no importable module. The host compiles against a protocol; the concrete types are `internal` inside a binary Xcode never links. There is no way for host code to grow an accidental dependency on an implementation detail.
+- **Behavior is data.** Which implementations exist is decided by which framework binaries are present in the bundle at launch — swap a plugin without recompiling or relinking the app (the [tamper experiment](#the-tamper-experiment) demonstrates this live).
+- **Enforced dependency direction.** Interfaces are the only stable, shared surface; implementations depend on them and never on each other's internals. Inter-plugin needs are declared in manifests and resolved by the loader — a dependency graph you can inspect and validate, not an accident of link order.
+
+The tradeoff: `dlopen` gives you raw pointers, magic strings, and undefined behavior when anything disagrees. Closing that gap — with compiler-checked contracts, macros that generate the unsafe machinery, load-time validation, and build-time verification — is the point of this library.
+
 ## How it works — from first principles
 
 Everything in this library (macros, manager, manifest) exists to automate and harden one mechanism. Understanding it makes the rest obvious.
@@ -34,6 +45,26 @@ You do *not* look up each plugin function individually. Instead:
 
 The Swift protocol *is* the function-signature contract, type-checked by the compiler on both sides. The plugin can't compile a `speak() -> Int` against it; the host can't call a `bark()` that isn't in it. Adding a function to the contract = adding a requirement to the protocol; both sides get compile errors until they agree.
 
+Solid arrows are ordinary dynamic links that dyld resolves at launch; dotted arrows are the runtime `dlopen` path — the only place this library does anything unusual:
+
+```mermaid
+graph TD
+    Host["Host app<br/>PluginManager"]
+    Runtime["DyLibPlugin runtime<br/>(.dynamic, embedded once)"]
+    Interface["AnimalInterface<br/>@PluginInterface protocol Animal + AnimalContract<br/>(.dynamic, embedded once)"]
+    Dog["DogPlugin.framework<br/>internal Dog: Animal<br/>@PluginMain module"]
+    Cat["CatPlugin.framework<br/>internal Cat: Animal<br/>@PluginMain module"]
+
+    Host -- "links (at launch)" --> Runtime
+    Host -- "links (at launch)" --> Interface
+    Dog -- links --> Runtime
+    Dog -- links --> Interface
+    Cat -- links --> Runtime
+    Cat -- links --> Interface
+    Host -. "dlopen (at runtime)<br/>copied into Frameworks/, never linked" .-> Dog
+    Host -. "dlopen (at runtime)<br/>copied into Frameworks/, never linked" .-> Cat
+```
+
 ### What happens at runtime, step by step
 
 1. `discoverPlugins()` lists framework binaries in the bundle's `Frameworks/` directory.
@@ -44,6 +75,30 @@ The Swift protocol *is* the function-signature contract, type-checked by the com
 6. `activateAll()` topologically sorts all registered manifests by their declared dependencies (with cycle/missing/version errors) and runs each module's `activate(context:)` in order.
 7. `instance(of: AnimalContract.self)` finds a plugin exporting `AnimalContract.interfaceID` (hash-checked), invokes its stored factory, and performs a **safe** `as? Animal` cast — a mismatch throws `.typeMismatch` instead of being undefined behavior.
 8. Every subsequent `animal.speak()` is plain protocol dispatch. The dlopen boundary was crossed exactly once.
+
+```mermaid
+sequenceDiagram
+    participant App as Host code
+    participant PM as PluginManager
+    participant P as Plugin binary
+
+    App->>PM: discoverPlugins()
+    PM->>P: dlopen(path, RTLD_NOW)
+    PM->>P: dlsym("dylib_plugin_main")
+    Note over PM,P: symbol absent -> not a plugin, skipped
+    PM->>P: call entry point (once per binary, cached)
+    P-->>PM: PluginDescriptor (manifest + factory closures)
+    PM->>PM: validate ABI version, record manifest
+    App->>PM: activateAll()
+    PM->>PM: topological sort by declared dependencies
+    PM->>P: Module.activate(context) in dependency order
+    App->>PM: instance(of: AnimalContract.self)
+    PM->>PM: compatibility hash check
+    PM->>P: factory(context)
+    P-->>PM: opaque instance
+    PM-->>App: safe cast to Animal (mismatch throws, never crashes)
+    App->>App: animal.speak() — ordinary Swift from here on
+```
 
 ### Why the pieces exist
 
@@ -170,7 +225,24 @@ When several plugins export the same interface, disambiguate with the source plu
 
 ## Dependencies between plugins
 
-Plugins can depend on interfaces exported by other plugins. The demo's `DogPlugin` decorates its bark with a sound effect provided by a separate toolkit plugin:
+Plugins can depend on interfaces exported by other plugins. The manager activates the graph in dependency order:
+
+```mermaid
+graph LR
+    Dog["com.demo.dog<br/>exports AnimalContract"]
+    Toolkit["com.demo.toolkit<br/>exports SoundEffectsContract"]
+    Cat["com.demo.cat<br/>exports AnimalContract"]
+
+    Dog -- "depends on, >= 1.0.0" --> Toolkit
+    Cat ~~~ Toolkit
+
+    subgraph order ["activation order"]
+        direction LR
+        O1["1. com.demo.cat"] ~~~ O2["2. com.demo.toolkit"] ~~~ O3["3. com.demo.dog"]
+    end
+```
+
+The demo's `DogPlugin` decorates its bark with a sound effect provided by a separate toolkit plugin:
 
 ```swift
 import AnimalInterface
