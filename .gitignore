@@ -1,0 +1,5 @@
+.build/
+.dist/
+Examples/**/Package.resolved
+.DS_Store
+xcuserdata/

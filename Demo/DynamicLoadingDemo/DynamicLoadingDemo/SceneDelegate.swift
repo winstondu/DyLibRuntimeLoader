@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  DynamicLoadingDemo
 //
-//  Created by Duy Quang Dao on 30/8/23.
+//  Created by Winston Du on 17/7/26.
 //
 
 import UIKit

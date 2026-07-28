@@ -1,6 +1,6 @@
 //
 //
-//  Created by Duy Quang Dao on 31/3/23.
+//  Created by Winston Du on 17/7/26.
 //
 
 import Foundation
@@ -18,6 +18,7 @@ import Foundation
 ///   - factory: Return the concrete implementation of protocol type
 ///   - forType: Protocol type
 /// - Returns: `UnsafeMutableRawPointer` which will be handle of the loader later
+@available(*, deprecated, message: "Use @DyLibInterface/@DyLibExport with DyLibLoader")
 public func dyLibCreator<T>(factory: @autoclosure @escaping () -> T, forType: T.Type) -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(DyLibBuilder<T>(factory: factory())).toOpaque()
 }

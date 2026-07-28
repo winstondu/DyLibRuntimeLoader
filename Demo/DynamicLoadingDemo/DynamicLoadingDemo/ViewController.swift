@@ -2,52 +2,37 @@
 //  ViewController.swift
 //  DynamicLoadingDemo
 //
-//  Created by Duy Quang Dao on 30/8/23.
+//  Created by Winston Du on 17/7/26.
 //
 
 import UIKit
 import AnimalInterface
 import DyLibRuntimeLoader
 
+@DyLibConnect(Animal.self, framework: "AnimalImplementation")
+enum DogPlugin {}
+
 class ViewController: UIViewController {
-
-    var animal: Animal!
-
-    @IBOutlet var lbl: UILabel!
-
-    @IBAction func load(sender: UIButton) {
-        do {
-            // Dynamic load framework first then load class from string
-            try dyLibLoad(fromFramework: .framework(name: "AnimalImplementation"))
-            if let dog = NSClassFromString("AnimalImplementation.Dog") as? AnimalClass.Type {
-                animal = dog.init()
-            } else if let cat = NSClassFromString("AnimalImplementation.Cat") as? AnimalClass.Type {
-                animal = cat.init()
-            } else {
-                show(title: "Error", message: "AnimalImplementation Classes are not found")
-            }
-
-            // Load instance directly from symbol
-//             animal = try dyLibLoad(withSymbol: "load_animal", fromFramework: .framework(name: "AnimalImplementation"), forType: Animal.self)
-            show(title: "Success", message: "Animal implementation is loaded")
-        } catch {
-            show(title: "Error", message: error.localizedDescription)
-        }
-    }
-
-    @IBAction func speak(sender: UIButton) {
-        show(title: "animal.speak()", message: animal.speak())
-    }
+    @IBOutlet private weak var label: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        lbl.text = Bundle.main.resourcePath
+        label.text = "Not loaded"
     }
 
-    private func show(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(.init(title: "Dismiss", style: .cancel))
-        present(alert, animated: true)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            let message = "Animal says: \(DogPlugin.instance.speak())"
+            label.text = message
+            NSLog("%@", message)
+        }
+    }
+
+    @IBAction private func loadAnimal(_ sender: UIButton) {
+        let message = "Animal says: \(DogPlugin.instance.speak())"
+        label.text = message
+        NSLog("%@", message)
     }
 }
-
