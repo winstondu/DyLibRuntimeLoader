@@ -1,6 +1,6 @@
-import DyLibPlugin
+import DyLibRuntimeLoader
 
-@PluginInterface
+@DyLibInterface
 public protocol Animal {
     func speak() -> String
 }
