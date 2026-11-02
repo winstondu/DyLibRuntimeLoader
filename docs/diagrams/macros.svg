@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="1000" height="720" viewBox="0 0 1000 720" role="img" aria-labelledby="t d">
-  <title id="t">What the three v2 macros generate</title>
+  <title id="t">What the three macros generate</title>
   <desc id="d">@DyLibInterface, @DyLibExport and @DyLibConnect each expand into code; the interface spec and the plugin export meet at one derived C symbol, __dylib_entry_Animal.</desc>
   <defs>
     <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -23,7 +23,7 @@
   <rect x="0" y="0" width="1000" height="720" fill="#ffffff"/>
 
   <text class="p" x="500" y="34" text-anchor="middle" font-size="20" font-weight="700">Three macros, one derived symbol</text>
-  <text class="p note" x="500" y="56" text-anchor="middle">What each v2 macro expands to, and where the interface module, the plugin and the client meet</text>
+  <text class="p note" x="500" y="56" text-anchor="middle">What each macro expands to, and where the interface module, the plugin and the client meet</text>
 
   <!-- ============ Column 1: Interface module ============ -->
   <rect x="20" y="76" width="300" height="30" rx="6" fill="#0969da"/>

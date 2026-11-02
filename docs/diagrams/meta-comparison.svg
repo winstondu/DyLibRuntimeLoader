@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="922" viewBox="0 0 1000 922" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
-<title>Meta FBiOS dylib architecture mapped to Dynasty v2</title>
+<title>Meta FBiOS dylib architecture mapped to Dynasty</title>
 <style>
 .t{font-size:15px;font-weight:600;fill:#1f2328}
 .b{font-size:13px;fill:#3d444d}
@@ -8,12 +8,12 @@
 </style>
 <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#57606a"/></marker></defs>
 <rect width="1000" height="922" fill="#ffffff"/>
-<text x="500.0" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2328">Meta FBiOS → Dynasty v2</text>
+<text x="500.0" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2328">Meta FBiOS → Dynasty</text>
 <text x="500.0" y="64" text-anchor="middle" class="b">Same goal (load feature code only when needed), problem by problem</text>
 <rect x="30" y="92" width="410" height="38" rx="8" fill="#0969da"/>
 <text x="235.0" y="117" text-anchor="middle" class="hd" fill="#ffffff">Meta FBiOS (2016–2018)</text>
 <rect x="560" y="92" width="410" height="38" rx="8" fill="#1a7f37"/>
-<text x="765.0" y="117" text-anchor="middle" class="hd" fill="#ffffff">Dynasty v2</text>
+<text x="765.0" y="117" text-anchor="middle" class="hd" fill="#ffffff">Dynasty</text>
 <rect x="30" y="150" width="410" height="108" rx="8" fill="#ddf4ff" stroke="#54aeff"/>
 <text x="46" y="176" class="t">2016 · Lazily loaded dylibs</text>
 <text x="46" y="200" class="b">Product code moved into dylibs that load lazily,</text>

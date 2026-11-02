@@ -2,7 +2,7 @@
 
 **Runtime dylib loading for Swift.**
 
-> Dynasty is v2 of [DyLibRuntimeLoader](https://github.com/duyquang91/DyLibRuntimeLoader) by Steve Dao ([@duyquang91](https://github.com/duyquang91)), and is based on his original v1. See [Credits](#credits).
+> Dynasty is based on [DyLibRuntimeLoader](https://github.com/duyquang91/DyLibRuntimeLoader) by Steve Dao ([@duyquang91](https://github.com/duyquang91)). See [Credits](#credits).
 
 Type-safe plugins for Swift on iOS and macOS: ship feature code as embedded dynamic frameworks that are **linked by nobody and loaded on first use**, with three Swift macros generating every symbol, entry point, and loader call so that the compiler, not a string, checks the wiring.
 
@@ -29,7 +29,7 @@ print(DogPlugin.instance.speak())   // AnimalImplementation.framework is dlopen'
 - [Usage patterns](#usage-patterns)
 - [Setting up an iOS app](#setting-up-an-ios-app)
 - [App Store review](#app-store-review)
-- [Reference](#reference): errors, unloading, repository layout, development, migration from v1
+- [Reference](#reference): errors, unloading, repository layout, development, differences from DyLibRuntimeLoader
 - [Credits](#credits)
 
 ## Why dynamic loading
@@ -157,9 +157,9 @@ Meta's [The evolution of Facebook's iOS app architecture](https://engineering.fb
 
 Dynasty keeps the idea and replaces the infrastructure with language features every Swift developer already has:
 
-![Mapping Meta's FBiOS approach to Dynasty v2](docs/diagrams/meta-comparison.svg)
+![Mapping Meta's FBiOS approach to Dynasty](docs/diagrams/meta-comparison.svg)
 
-| FBiOS | Dynasty v2 |
+| FBiOS | Dynasty |
 | --- | --- |
 | Product code in lazily loaded dylibs, off the pre-main path | Plugins are embedded, unlinked frameworks, opened with `dlopen` on first use |
 | String lookups (`NSClassFromString`) fail across unloaded dylibs | No string lookup: macro-derived C entry symbols and typed `PluginSpec`s |
@@ -168,7 +168,7 @@ Dynasty keeps the idea and replaces the infrastructure with language features ev
 | Build-time plugin validation | Compiler-checked conformance, derived symbols, and typed dependencies, plus runtime magic, ABI, and identity checks |
 | Non-idiomatic, generated registry hard to find | Plain Swift protocols, and generated code is one **Expand Macro** away |
 
-The original v1 of this library mimicked the 2016 stage: handwritten `@_cdecl` strings and untyped casts. v2 is the 2018 stage, without the custom build system.
+Steve Dao's DyLibRuntimeLoader, which Dynasty is based on, mimicked the 2016 stage: handwritten `@_cdecl` strings and untyped casts. Dynasty is the 2018 stage, without the custom build system.
 
 ## Usage patterns
 
@@ -314,7 +314,7 @@ All loader failures are `DyLibError`:
 ```text
 .
 ├── Sources/
-│   ├── Dynasty/                    Runtime, public macros, loader, deprecated v1 adapters
+│   ├── Dynasty/                    Runtime, public macros, loader, deprecated DyLibRuntimeLoader adapters
 │   └── DynastyMacros/              SwiftSyntax implementations of the three macros
 ├── Tests/                          Runtime and macro tests (enabled with DYLIB_DEV=1)
 ├── Examples/                       SwiftPM end-to-end example: two interfaces, three plugins, one host
@@ -348,11 +348,11 @@ DYLIB_DEV=1 swift test
 
 `DYLIB_DEV=1` adds test targets, test-only dependencies, and unsafe linker flags only for maintainers, keeping them out of consumers' dependency resolution.
 
-### Migration from v1
+### Differences from DyLibRuntimeLoader
 
-Steve Dao's [DyLibRuntimeLoader](https://github.com/duyquang91/DyLibRuntimeLoader) v1 proved the core idea: put an implementation in a framework, open it with `dlopen`, and get an instance back through a C entry point. Dynasty keeps that idea and changes how each side of the boundary is written and checked:
+Steve Dao's [DyLibRuntimeLoader](https://github.com/duyquang91/DyLibRuntimeLoader) proved the core idea: put an implementation in a framework, open it with `dlopen`, and get an instance back through a C entry point. Dynasty keeps that idea and changes how each side of the boundary is written and checked:
 
-| | DyLibRuntimeLoader v1 | Dynasty |
+| | DyLibRuntimeLoader | Dynasty |
 | --- | --- | --- |
 | Exporting an implementation | A handwritten `@_cdecl("symbol")` function that returns `dyLibCreator(factory:forType:)` | `@DyLibExport(Interface.self)` generates the entry point |
 | Entry symbol | A string typed separately on each side, so a typo fails only at runtime | Derived from the protocol name and version on both sides |
@@ -366,9 +366,9 @@ Steve Dao's [DyLibRuntimeLoader](https://github.com/duyquang91/DyLibRuntimeLoade
 | Errors | `DynamicFrameworkLoaderError`: `symbolNotFound`, `failedToOpenFile`, `unknown` | `DyLibError`, with a case for each failure (see [Errors](#errors)) |
 | Observability | None | Optional per-connection `DyLibLoadLogger` |
 
-The v1 API still compiles as deprecated adapters routed through the Dynasty loader, so you can migrate one call site at a time:
+The DyLibRuntimeLoader API still compiles as deprecated adapters routed through the Dynasty loader, so you can migrate one call site at a time:
 
-| Deprecated v1 API | Dynasty replacement |
+| Deprecated DyLibRuntimeLoader API | Dynasty replacement |
 | --- | --- |
 | Handwritten `@_cdecl("symbol")` plus `dyLibCreator(factory:forType:)` | `@DyLibExport(Interface.self)` on the implementation |
 | `dyLibLoad(withSymbol:fromPath:forType:)` | `InterfacePluginSpec.load(from: path)` |
@@ -380,7 +380,7 @@ The v1 API still compiles as deprecated adapters routed through the Dynasty load
 
 ## Credits
 
-Dynasty is based on [DyLibRuntimeLoader](https://github.com/duyquang91/DyLibRuntimeLoader) v1, created by Steve Dao ([@duyquang91](https://github.com/duyquang91)). v1 established the approach this library builds on: shipping implementations as embedded frameworks, opening them with `dlopen`, and resolving a `@_cdecl` factory with `dlsym`. Its API is still available as deprecated adapters (see [Migration from v1](#migration-from-v1)).
+Dynasty is based on [DyLibRuntimeLoader](https://github.com/duyquang91/DyLibRuntimeLoader), created by Steve Dao ([@duyquang91](https://github.com/duyquang91)). DyLibRuntimeLoader established the approach this library builds on: shipping implementations as embedded frameworks, opening them with `dlopen`, and resolving a `@_cdecl` factory with `dlsym`. Its API is still available as deprecated adapters (see [Differences from DyLibRuntimeLoader](#differences-from-dylibruntimeloader)).
 
 ## License
 
