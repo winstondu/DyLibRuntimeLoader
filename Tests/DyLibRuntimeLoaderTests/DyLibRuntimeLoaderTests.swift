@@ -428,7 +428,7 @@ private enum ResultOnlyLogger: DyLibLoadLogger {
         #expect(results.first?.interface == "LazyTestPlugin")
         #expect(results.first?.path == path)
         #expect(results.first?.error == nil)
-        #expect(results.first.map { $0.duration >= .milliseconds(10) } == true)
+        #expect(results.first.map { $0.duration >= 0.01 } == true)
     }
 
     @Test func failedLoadReportsErrorBeforeRethrowing() {

@@ -214,7 +214,7 @@ enum PluginLog: DyLibLoadLogger {
 
     static func didLoad(_ event: DyLibLoadResult) {
         let outcome = event.error.map { "failed: \($0)" } ?? "ok"
-        log.info("Loaded \(event.interface) from \(event.path) in \(event.duration): \(outcome)")
+        log.info("Loaded \(event.interface) from \(event.path) in \(event.duration)s: \(outcome)")
     }
 }
 
@@ -224,10 +224,9 @@ enum DogPlugin {}
 
 - One event per **real load**. Cache hits are silent, and because failures are not cached, each retry produces its own event.
 - `didLoad` fires on success and on failure, so a load that is about to trap a non-throwing proxy requirement is logged first. `willLoad` is optional and defaults to a no-op.
-- `duration` is measured with `ContinuousClock` from the first call to a usable instance, covering `dlopen` of the image and its dependencies, the symbol lookup, header validation, and the factory call.
+- `duration` is in seconds on the monotonic uptime clock, from the first call to a usable instance, covering `dlopen` of the image and its dependencies, the symbol lookup, header validation, and the factory call.
 - Leave `logger:` out and nothing is logged; the connection expands exactly as before and reads no clock. There is no global logger, so two connections can log differently.
 - Callbacks run outside `DyLibLoader`'s lock but inside the connection's own, so a logger must not call into the connection it is logging.
-- `DyLibLoadLogger` uses `Duration`, so it requires macOS 13 / iOS 16 or newer at the connection's declaration site.
 
 ## Setting up an iOS app
 

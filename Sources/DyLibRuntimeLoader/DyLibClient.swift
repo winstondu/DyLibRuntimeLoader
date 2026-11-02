@@ -5,25 +5,13 @@ public final class DyLibLazyPlugin<S: DyLibPluginSpec>: @unchecked Sendable {
     private let lock = NSRecursiveLock()
     private let library: () -> DyLibLibrary
     private let loadOperation: (DyLibLibrary) throws -> S.Interface
-    /// A `DyLibLoadLogger` metatype, or nil. Stored erased because the protocol
-    /// needs `Duration`, which is newer than this class's deployment floor.
-    private let logger: Any.Type?
+    private let logger: (any DyLibLoadLogger.Type)?
     private var cachedInstance: S.Interface?
     private var loaded = false
 
-    public init(
-        loader: DyLibLoader = .shared,
-        library: @escaping () -> DyLibLibrary
-    ) {
-        self.library = library
-        self.logger = nil
-        loadOperation = { try loader.load(S.self, from: $0) }
-    }
-
     /// `logger` receives one event per real load; cache hits are silent.
-    @available(macOS 13.0, iOS 16.0, tvOS 16.0, watchOS 9.0, *)
     public init(
-        logger: (any DyLibLoadLogger.Type)?,
+        logger: (any DyLibLoadLogger.Type)? = nil,
         loader: DyLibLoader = .shared,
         library: @escaping () -> DyLibLibrary
     ) {
@@ -39,7 +27,6 @@ public final class DyLibLazyPlugin<S: DyLibPluginSpec>: @unchecked Sendable {
     }
 
     /// Test seam. `loadOperation` must throw `DyLibError`, as `DyLibLoader` does.
-    @available(macOS 13.0, iOS 16.0, tvOS 16.0, watchOS 9.0, *)
     internal init(
         logger: (any DyLibLoadLogger.Type)?,
         path: String,
@@ -67,22 +54,19 @@ public final class DyLibLazyPlugin<S: DyLibPluginSpec>: @unchecked Sendable {
     /// is read only when it is set. `DyLibLoader` never holds its lock here.
     private func performLoad() throws -> S.Interface {
         let library = library()
-        guard
-            #available(macOS 13.0, iOS 16.0, tvOS 16.0, watchOS 9.0, *),
-            let logger = logger as? any DyLibLoadLogger.Type
-        else {
+        guard let logger else {
             return try loadOperation(library)
         }
 
         let interface = String(describing: S.Interface.self)
         logger.willLoad(DyLibLoadStart(interface: interface, path: library.path))
-        let start = ContinuousClock.now
+        let start = DispatchTime.now().uptimeNanoseconds
         do {
             let instance = try loadOperation(library)
             logger.didLoad(DyLibLoadResult(
                 interface: interface,
                 path: library.path,
-                duration: start.duration(to: .now),
+                duration: Self.seconds(since: start),
                 error: nil
             ))
             return instance
@@ -90,11 +74,16 @@ public final class DyLibLazyPlugin<S: DyLibPluginSpec>: @unchecked Sendable {
             logger.didLoad(DyLibLoadResult(
                 interface: interface,
                 path: library.path,
-                duration: start.duration(to: .now),
+                duration: Self.seconds(since: start),
                 error: error
             ))
             throw error
         }
+    }
+
+    private static func seconds(since start: UInt64) -> TimeInterval {
+        let elapsed = DispatchTime.now().uptimeNanoseconds &- start
+        return TimeInterval(elapsed) / 1_000_000_000
     }
 
     public var isLoaded: Bool {
