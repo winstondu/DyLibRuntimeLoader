@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1474" viewBox="0 0 1000 1474" font-family="system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+<title>First call of DogPlugin.instance.speak(): lazy load sequence</title>
+<style>
+  .t { font-size: 20px; font-weight: 700; fill: #0f172a; }
+  .st { font-size: 13px; fill: #475569; }
+  .hd { font-size: 14px; font-weight: 700; fill: #0f172a; }
+  .hs { font-size: 11px; fill: #64748b; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .m { font-size: 12px; fill: #0f172a; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .n { font-size: 11.5px; fill: #1e293b; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .s { font-size: 11.5px; fill: #64748b; font-style: italic; }
+  .tag { font-size: 11.5px; font-weight: 700; fill: #ffffff; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .p { font-size: 13px; fill: #1e293b; }
+  .pb { font-size: 13px; font-weight: 700; fill: #0f172a; }
+  .pc { font-size: 12px; fill: #1e293b; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .h { paint-order: stroke; stroke: #ffffff; stroke-width: 5px; stroke-linejoin: round; }
+</style>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#334155"/></marker>
+  <marker id="arrowOpen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#334155" stroke-width="1.6"/></marker>
+</defs>
+<rect width="1000" height="1474" fill="#ffffff"/>
+<text class="t" x="24" y="38">First call: DogPlugin.instance.speak()</text>
+<text class="st" x="24" y="60">How a @DyLibConnect lazy reference loads, validates and caches a plugin, then forwards the call.</text>
+<line x1="90" y1="132" x2="90" y2="1300" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 5"/>
+<line x1="255" y1="132" x2="255" y2="1300" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 5"/>
+<line x1="422" y1="132" x2="422" y2="1300" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 5"/>
+<line x1="592" y1="132" x2="592" y2="1300" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 5"/>
+<line x1="765" y1="132" x2="765" y2="1300" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 5"/>
+<line x1="918" y1="132" x2="918" y2="1300" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 5"/>
+<rect x="14" y="84" width="152" height="48" rx="8" fill="#ffffff" stroke="#475569" stroke-width="1.6"/>
+<rect x="14" y="84" width="152" height="5" rx="2" fill="#475569"/>
+<text class="hd" x="90" y="108" text-anchor="middle">Caller</text>
+<text class="hs" x="90" y="124" text-anchor="middle">host code</text>
+<rect x="179" y="84" width="152" height="48" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.6"/>
+<rect x="179" y="84" width="152" height="5" rx="2" fill="#4f46e5"/>
+<text class="hd" x="255" y="108" text-anchor="middle">AnimalLazyProxy</text>
+<text class="hs" x="255" y="124" text-anchor="middle">macro-generated</text>
+<rect x="346" y="84" width="152" height="48" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.6"/>
+<rect x="346" y="84" width="152" height="5" rx="2" fill="#4f46e5"/>
+<text class="hd" x="422" y="108" text-anchor="middle">DyLibLazyPlugin</text>
+<text class="hs" x="422" y="124" text-anchor="middle">&lt;AnimalPluginSpec&gt;</text>
+<rect x="516" y="84" width="152" height="48" rx="8" fill="#ffffff" stroke="#b45309" stroke-width="1.6"/>
+<rect x="516" y="84" width="152" height="5" rx="2" fill="#b45309"/>
+<text class="hd" x="592" y="108" text-anchor="middle">DyLibLoader</text>
+<text class="hs" x="592" y="124" text-anchor="middle">.shared</text>
+<rect x="689" y="84" width="152" height="48" rx="8" fill="#ffffff" stroke="#475569" stroke-width="1.6"/>
+<rect x="689" y="84" width="152" height="5" rx="2" fill="#475569"/>
+<text class="hd" x="765" y="108" text-anchor="middle">dyld</text>
+<text class="hs" x="765" y="124" text-anchor="middle">dlopen / dlsym</text>
+<rect x="842" y="84" width="152" height="48" rx="8" fill="#ffffff" stroke="#047857" stroke-width="1.6"/>
+<rect x="842" y="84" width="152" height="5" rx="2" fill="#047857"/>
+<text class="hd" x="918" y="108" text-anchor="middle">Plugin image</text>
+<text class="hs" x="918" y="124" text-anchor="middle">AnimalImplementation</text>
+<line x1="90" y1="170" x2="253" y2="170" stroke="#334155" stroke-width="1.4" marker-end="url(#arrow)"/>
+<text class="m h" x="172.5" y="163" text-anchor="middle">instance.speak()</text>
+<text class="s h" x="172.5" y="185" text-anchor="middle">proxy built; nothing loaded</text>
+<line x1="255" y1="214" x2="420" y2="214" stroke="#334155" stroke-width="1.4" marker-end="url(#arrow)"/>
+<text class="m h" x="338.5" y="207" text-anchor="middle">loadIfNeeded()</text>
+<text class="s h" x="338.5" y="229" text-anchor="middle">via _resolved()</text>
+<rect x="432" y="240" width="286" height="28" rx="6" fill="#eef2ff" stroke="#a5b4fc"/>
+<text class="n" xml:space="preserve" x="442" y="259">lock.withLock {   // NSRecursiveLock</text>
+<rect x="160" y="282" width="340" height="60" rx="4" fill="none" stroke="#94a3b8" stroke-width="1.2"/>
+<path d="M160 282 h37 v12 l-8 8 H160 Z" fill="#94a3b8"/>
+<text class="tag" x="167" y="297">opt</text>
+<text class="s" x="205" y="297">[loaded == true]</text>
+<line x1="422" y1="326" x2="257" y2="326" stroke="#334155" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrowOpen)"/>
+<text class="m h" x="338.5" y="319" text-anchor="middle">cachedInstance!</text>
+<line x1="422" y1="378" x2="590" y2="378" stroke="#334155" stroke-width="1.4" marker-end="url(#arrow)"/>
+<text class="m h" x="507.0" y="371" text-anchor="middle">load(AnimalPluginSpec.self)</text>
+<text class="s h" x="507.0" y="393" text-anchor="middle">from: library()  .framework(...)</text>
+<rect x="602" y="404" width="293" height="60" rx="6" fill="#f8fafc" stroke="#cbd5e1"/>
+<text class="n" xml:space="preserve" x="612" y="423">loadPlan(for: library)</text>
+<text class="n" xml:space="preserve" x="612" y="439">DFS on canonical paths: deps first,</text>
+<text class="n" xml:space="preserve" x="612" y="455">target last; cycle -&gt; dependencyCycle</text>
+<rect x="460" y="476" width="530" height="236" rx="4" fill="none" stroke="#b45309" stroke-width="1.2"/>
+<path d="M460 476 h44 v12 l-8 8 H460 Z" fill="#b45309"/>
+<text class="tag" x="467" y="491">loop</text>
+<text class="s" x="512" y="491">[for each path in plan]</text>
+<rect x="602" y="512" width="301" height="28" rx="6" fill="#fffbeb" stroke="#fcd34d"/>
+<text class="n" xml:space="preserve" x="612" y="531">lock { resident? refCount += 1; next }</text>
+<line x1="592" y1="574" x2="763" y2="574" stroke="#334155" stroke-width="1.4" marker-end="url(#arrow)"/>
+<text class="m h" x="678.5" y="567" text-anchor="middle">dlopen(path, flags)</text>
+<text class="s h" x="678.5" y="589" text-anchor="middle">outside the loader lock</text>
+<line x1="765" y1="622" x2="594" y2="622" stroke="#334155" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrowOpen)"/>
+<text class="m h" x="678.5" y="615" text-anchor="middle">rawHandle</text>
+<rect x="602" y="636" width="338" height="60" rx="6" fill="#fffbeb" stroke="#fcd34d"/>
+<text class="n" xml:space="preserve" x="612" y="655">lock { registered meanwhile? refCount += 1,</text>
+<text class="n" xml:space="preserve" x="612" y="671">       dlclose(ours)  // race loser</text>
+<text class="n" xml:space="preserve" x="612" y="687">       else Record(refCount: 1) }</text>
+<line x1="592" y1="746" x2="763" y2="746" stroke="#334155" stroke-width="1.4" marker-end="url(#arrow)"/>
+<text class="m h" x="678.5" y="739" text-anchor="middle">dlsym(handle, "__dylib_entry_Animal")</text>
+<text class="s h" x="678.5" y="761" text-anchor="middle">RTLD_FIRST: this image only, not its deps</text>
+<line x1="765" y1="790" x2="594" y2="790" stroke="#334155" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrowOpen)"/>
+<text class="m h" x="678.5" y="783" text-anchor="middle">symbol</text>
+<line x1="592" y1="834" x2="916" y2="834" stroke="#334155" stroke-width="1.4" marker-end="url(#arrow)"/>
+<text class="m h" x="755.0" y="827" text-anchor="middle">entry()  // @convention(c)</text>
+<text class="s h" x="755.0" y="849" text-anchor="middle">@_cdecl("__dylib_entry_Animal")</text>
+<rect x="622" y="860" width="286" height="44" rx="6" fill="#ecfdf5" stroke="#6ee7b7"/>
+<text class="n" xml:space="preserve" x="632" y="879">dyLibMakeEntry: passRetained(entry),</text>
+<text class="n" xml:space="preserve" x="632" y="895">allocate + init DyLibEntryHeader</text>
+<line x1="918" y1="942" x2="594" y2="942" stroke="#334155" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrowOpen)"/>
+<text class="m h" x="755.0" y="935" text-anchor="middle">UnsafeMutableRawPointer (header)</text>
+<rect x="602" y="958" width="271" height="44" rx="6" fill="#fef2f2" stroke="#fca5a5"/>
+<text class="n" xml:space="preserve" x="612" y="977">validate magic, ABI, spec identity</text>
+<text class="n" xml:space="preserve" x="612" y="993">(see entry-header.svg)</text>
+<line x1="592" y1="1028" x2="916" y2="1028" stroke="#334155" stroke-width="1.4" marker-end="url(#arrow)"/>
+<text class="m h" x="755.0" y="1021" text-anchor="middle">entry.makeInstance()</text>
+<line x1="918" y1="1062" x2="594" y2="1062" stroke="#334155" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrowOpen)"/>
+<text class="m h" x="755.0" y="1055" text-anchor="middle">Dog() as Any</text>
+<rect x="266" y="1076" width="316" height="28" rx="6" fill="#fef2f2" stroke="#fca5a5"/>
+<text class="n" xml:space="preserve" x="276" y="1095">as? any Animal  // else specTypeMismatch</text>
+<line x1="592" y1="1124" x2="424" y2="1124" stroke="#334155" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrowOpen)"/>
+<text class="m h" x="507.0" y="1117" text-anchor="middle">any Animal</text>
+<text class="s h" x="507.0" y="1139" text-anchor="middle">handle kept: load-and-keep</text>
+<rect x="141" y="1150" width="271" height="44" rx="6" fill="#eef2ff" stroke="#a5b4fc"/>
+<text class="n" xml:space="preserve" x="151" y="1169">cachedInstance = it; loaded = true</text>
+<text class="n" xml:space="preserve" x="151" y="1185">}  // unlock</text>
+<!-- tail -->
+<line x1="422" y1="1216" x2="257" y2="1216" stroke="#334155" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrowOpen)"/>
+<text class="m h" x="338.5" y="1209" text-anchor="middle">any Animal</text>
+<line x1="255" y1="1252" x2="916" y2="1252" stroke="#334155" stroke-width="1.4" marker-end="url(#arrow)"/>
+<text class="m h" x="586.5" y="1245" text-anchor="middle">speak()  forwarded to the real Dog</text>
+<line x1="918" y1="1288" x2="92" y2="1288" stroke="#334155" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#arrowOpen)"/>
+<text class="m h" x="504.0" y="1281" text-anchor="middle">"Woof!"</text>
+<rect x="24" y="1324" width="466" height="126" rx="10" fill="#eef2ff" stroke="#a5b4fc" stroke-width="1.4"/>
+<text class="pb" x="40" y="1350">Second call hits the cache</text>
+<text class="p" x="40" y="1374">instance.speak() -&gt; loadIfNeeded() sees loaded == true</text>
+<text class="p" x="40" y="1393">and returns cachedInstance under the lazy lock.</text>
+<text class="p" x="40" y="1412">No loader lock, no dlopen, no dlsym, no header.</text>
+<rect x="510" y="1324" width="466" height="126" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+<text class="pb" x="526" y="1350">Failures are not cached: the next call retries</text>
+<text class="p" x="526" y="1374">loadWithHandle catches, closes its handle (refcounts</text>
+<text class="p" x="526" y="1393">drop, dlclose at zero) and rethrows; loaded stays false.</text>
+<text class="p" x="526" y="1412">The proxy fatalErrors on a throw, so call</text>
+<text class="p" x="526" y="1431">DogPlugin.loadIfNeeded() where errors must be handled.</text>
+</svg>
