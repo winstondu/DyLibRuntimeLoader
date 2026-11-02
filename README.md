@@ -206,6 +206,30 @@ let dog = try AnimalPluginSpec.load(from: DyLibLibrary(
 
 ## Setting up an iOS app
 
+### How the app packages interfaces vs. implementations
+
+Both kinds of framework end up in the same place, `YourApp.app/Frameworks/`, signed with the app. What differs is whether the app binary *references* them. Embedding copies a framework into the bundle; linking adds an `LC_LOAD_DYLIB` load command that makes dyld open it before `main()`. Interfaces get both. Implementations get only the first.
+
+| | Interface modules and the runtime | Implementations (plugins) |
+| --- | --- | --- |
+| Examples in the demo | `DyLibRuntimeLoader`, `AnimalInterface`, `TrickInterface`, `DemoLogging` | `CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation` |
+| How it enters the project | Swift package with a `.dynamic` library product | Framework target in the app project (or a prebuilt `.xcframework`) |
+| Link Binary With Libraries | **Yes** | **No** |
+| Embed Frameworks (Code Sign On Copy) | Yes | Yes |
+| `import`ed by app code | Yes, the app calls the protocols | **Never**, the app names it only as a string in `@DyLibConnect(framework:)` |
+| Load command in the app binary | Yes | None (`otool -L` won't list it) |
+| When it is mapped | By dyld at launch, before `main()` | By `dlopen` on the first call through its connection |
+| If it is missing from the bundle | The app cannot launch | The app launches; that connection throws `failedToOpen` when used |
+| Copies per process | Exactly one, shared by the app and every plugin | One, opened once and reference-counted by `DyLibLoader` |
+
+A few details make this work:
+
+- **Build order without linking.** The app target lists each implementation as a *target dependency* so Xcode builds it before the Embed Frameworks phase copies it, but the link phase never mentions it.
+- **Plugins link interfaces, never each other.** Each implementation links the interfaces it uses and the runtime, which is how it resolves `Animal`, `Trick`, and `DebugLogger` to the app's single copies through `@rpath` (`@executable_path/Frameworks`). Linking against a `.dynamic` product records a load command but copies nothing, so the plugin doesn't carry its own interface copy. A plugin reaches another plugin only through a connection (`Dog` → `TrickImplementation`), never by linking it.
+- **Only the app embeds.** Plugins don't embed their dependencies. The app embeds every framework exactly once, which is [the golden rule](#the-golden-rule-one-copy-of-every-shared-module) applied to packaging.
+
+### Steps
+
 The [demo](Demo/DynamicLoadingDemo) shows the full setup:
 
 1. Add the runtime and each interface module as Swift packages. They are `.dynamic` products, so they are **linked and embedded**.
