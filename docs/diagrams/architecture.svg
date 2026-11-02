@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="900" height="962" viewBox="0 0 900 962" font-family="-apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="900" height="966" viewBox="0 0 900 966" font-family="-apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif">
   <title>Linked vs. loaded: how DyLibRuntimeLoader lays out an iOS app bundle</title>
   <defs>
     <marker id="arrSolid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
@@ -16,18 +16,18 @@
     .h { font-weight: 700; }
   </style>
 
-  <rect x="0" y="0" width="900" height="962" fill="#ffffff"/>
+  <rect x="0" y="0" width="900" height="966" fill="#ffffff"/>
 
   <text x="20" y="36" class="t h" font-size="20">Linked vs. loaded</text>
   <text x="20" y="58" class="muted" font-size="13">Interfaces are linked at launch; implementations ship in the bundle but are only dlopen'd when first used.</text>
 
   <!-- App bundle -->
-  <rect x="20" y="76" width="860" height="814" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+  <rect x="20" y="76" width="860" height="818" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
   <text x="36" y="99" class="t h" font-size="14">DynamicLoadingDemo.app</text>
 
   <!-- Legend -->
-  <line x1="436" y1="95" x2="464" y2="95" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <text x="470" y="99" fill="#047857" font-size="11">links: load command, @rpath to the app's copy</text>
+  <line x1="414" y1="95" x2="442" y2="95" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
+  <text x="448" y="99" fill="#047857" font-size="11">dyld link: load command, @rpath to the app's copy</text>
   <line x1="722" y1="95" x2="750" y2="95" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
   <text x="756" y="99" fill="#c2410c" font-size="11">dlopen on first use</text>
 
@@ -72,95 +72,99 @@
   <text x="681" y="366" class="code">  DyLibLoadLogger</text>
 
   <!-- dlopen labels between the bands -->
-  <text x="249" y="437" fill="#c2410c" font-size="11">first use of</text>
-  <text x="249" y="451" fill="#c2410c" font-size="11" font-weight="600">MousePlugin</text>
-  <text x="458" y="437" fill="#c2410c" font-size="11">first use of</text>
-  <text x="458" y="451" fill="#c2410c" font-size="11" font-weight="600">CatPlugin</text>
-  <text x="667" y="437" fill="#c2410c" font-size="11">first use of</text>
-  <text x="667" y="451" fill="#c2410c" font-size="11" font-weight="600">DogPlugin</text>
+  <text x="249" y="430" fill="#c2410c" font-size="11">dlopen on first use</text>
+  <text x="249" y="443" fill="#c2410c" font-size="11">of <tspan font-weight="600">MousePlugin</tspan></text>
+  <text x="458" y="430" fill="#c2410c" font-size="11">dlopen on first use</text>
+  <text x="458" y="443" fill="#c2410c" font-size="11">of <tspan font-weight="600">CatPlugin</tspan></text>
+  <text x="667" y="430" fill="#c2410c" font-size="11">dlopen on first use</text>
+  <text x="667" y="443" fill="#c2410c" font-size="11">of <tspan font-weight="600">DogPlugin</tspan></text>
 
   <!-- Embedded band -->
-  <rect x="32" y="468" width="836" height="408" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="1.5" stroke-dasharray="7 4"/>
+  <rect x="32" y="490" width="836" height="388" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="1.5" stroke-dasharray="7 4"/>
 
   <!-- Lazy dlopen arrows from the app to each animal, through the gaps between linked boxes -->
-  <path d="M241,246 L241,500" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
-  <path d="M450,246 L450,500" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
-  <path d="M659,246 L659,500" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
+  <path d="M241,246 L241,518" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
+  <path d="M450,246 L450,518" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
+  <path d="M659,246 L659,518" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
 
-  <!-- Link edges: each plugin's load commands, drawn to one framework its link phase names (full list in the box) -->
-  <line x1="110" y1="502" x2="110" y2="382" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <line x1="540" y1="502" x2="540" y2="382" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <line x1="800" y1="502" x2="800" y2="382" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <line x1="587" y1="740" x2="587" y2="382" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
+  <!-- dyld link edges for the interface links. Mouse, Cat, Dog -> AnimalInterface share one rail;
+       Cat, Dog, Trick -> TrickInterface share one spine, which hops over the Animal rail. -->
+  <path d="M120,520 L120,458 L581,458 A6,6 0 0 1 593,458 L800,458 L800,520" fill="none" stroke="#047857" stroke-width="1.5"/>
+  <path d="M380,520 L380,458" fill="none" stroke="#047857" stroke-width="1.5"/>
+  <path d="M430,458 L430,382" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
+  <path d="M560,520 L560,476 L620,476 L620,520" fill="none" stroke="#047857" stroke-width="1.5"/>
+  <path d="M587,742 L587,382" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
+  <circle cx="380" cy="458" r="2.5" fill="#047857"/>
+  <circle cx="430" cy="458" r="2.5" fill="#047857"/>
+  <circle cx="587" cy="476" r="2.5" fill="#047857"/>
+  <text x="424" y="404" fill="#047857" font-size="11" font-weight="600" text-anchor="end">dyld link</text>
+  <text x="593" y="404" fill="#047857" font-size="11" font-weight="600">dyld link</text>
 
   <rect x="44" y="281" width="392" height="17" fill="#ecfdf5"/>
   <text x="48" y="293" fill="#b91c1c" font-size="12" class="h">Missing any one of these: dyld aborts and the app won't launch.</text>
   <rect x="556" y="280" width="302" height="18" fill="#ecfdf5"/>
   <text x="852" y="293" fill="#047857" class="h" font-size="13" text-anchor="end">Dynamically LINKED: dyld loads these before main()</text>
-  <text x="48" y="864" fill="#c2410c" class="h" font-size="13">EMBEDDED in Frameworks/, NOT linked by the app: dlopen on first use</text>
+  <text x="48" y="866" fill="#c2410c" class="h" font-size="13">EMBEDDED in Frameworks/, NOT linked by the app: dlopen on first use</text>
 
   <!-- Mouse -->
-  <rect x="48" y="502" width="256" height="186" rx="8" fill="#ffffff" stroke="#f97316"/>
-  <text x="62" y="526" class="t h" font-size="14">MouseImplementation.framework</text>
-  <text x="62" y="548" class="code-sm">@DyLibExport(Animal.self)</text>
-  <text x="62" y="566" class="code-sm">public struct Mouse: Animal</text>
-  <text x="62" y="590" class="muted" font-size="12">speak() returns "Squeak!"</text>
-  <text x="62" y="608" class="muted" font-size="12">no connections of its own</text>
-  <line x1="58" y1="644" x2="294" y2="644" stroke="#d1fae5"/>
-  <text x="62" y="662" fill="#047857" font-size="11" font-weight="600">links AnimalInterface,</text>
-  <text x="62" y="678" fill="#047857" font-size="11" font-weight="600">DyLibRuntimeLoader</text>
+  <rect x="48" y="520" width="256" height="172" rx="8" fill="#ffffff" stroke="#f97316"/>
+  <text x="62" y="544" class="t h" font-size="14">MouseImplementation.framework</text>
+  <text x="62" y="566" class="code-sm">@DyLibExport(Animal.self)</text>
+  <text x="62" y="584" class="code-sm">public struct Mouse: Animal</text>
+  <text x="62" y="608" class="muted" font-size="12">speak() returns "Squeak!"</text>
+  <text x="62" y="626" class="muted" font-size="12">no connections of its own</text>
+  <line x1="58" y1="664" x2="294" y2="664" stroke="#d1fae5"/>
+  <text x="62" y="681" fill="#047857" font-size="11" font-weight="600">links DyLibRuntimeLoader</text>
 
   <!-- Cat -->
-  <rect x="322" y="502" width="256" height="186" rx="8" fill="#ffffff" stroke="#f97316"/>
-  <text x="336" y="526" class="t h" font-size="14">CatImplementation.framework</text>
-  <text x="336" y="548" class="code-sm">@DyLibExport(Animal.self)</text>
-  <text x="336" y="566" class="code-sm">public struct Cat: Animal</text>
-  <text x="336" y="590" class="code-sm">@DyLibConnect(Trick.self,</text>
-  <text x="336" y="606" class="code-sm">  framework: "TrickImplementation",</text>
-  <text x="336" y="622" class="code-sm">  logger: DebugLogger.self)</text>
-  <text x="336" y="638" class="code-sm">enum TrickPlugin {}</text>
-  <line x1="332" y1="644" x2="568" y2="644" stroke="#d1fae5"/>
-  <text x="336" y="662" fill="#047857" font-size="11" font-weight="600">links AnimalInterface, TrickInterface,</text>
-  <text x="336" y="678" fill="#047857" font-size="11" font-weight="600">DemoLogging, DyLibRuntimeLoader</text>
+  <rect x="322" y="520" width="256" height="172" rx="8" fill="#ffffff" stroke="#f97316"/>
+  <text x="336" y="544" class="t h" font-size="14">CatImplementation.framework</text>
+  <text x="336" y="566" class="code-sm">@DyLibExport(Animal.self)</text>
+  <text x="336" y="584" class="code-sm">public struct Cat: Animal</text>
+  <text x="336" y="608" class="code-sm">@DyLibConnect(Trick.self,</text>
+  <text x="336" y="624" class="code-sm">  framework: "TrickImplementation",</text>
+  <text x="336" y="640" class="code-sm">  logger: DebugLogger.self)</text>
+  <text x="336" y="656" class="code-sm">enum TrickPlugin {}</text>
+  <line x1="332" y1="664" x2="568" y2="664" stroke="#d1fae5"/>
+  <text x="336" y="681" fill="#047857" font-size="11" font-weight="600">links DemoLogging, DyLibRuntimeLoader</text>
 
   <!-- Dog -->
-  <rect x="596" y="502" width="256" height="186" rx="8" fill="#ffffff" stroke="#f97316"/>
-  <text x="610" y="526" class="t h" font-size="14">DogImplementation.framework</text>
-  <text x="610" y="548" class="code-sm">@DyLibExport(Animal.self)</text>
-  <text x="610" y="566" class="code-sm">public struct Dog: Animal</text>
-  <text x="610" y="590" class="code-sm">@DyLibConnect(Trick.self,</text>
-  <text x="610" y="606" class="code-sm">  framework: "TrickImplementation",</text>
-  <text x="610" y="622" class="code-sm">  logger: DebugLogger.self)</text>
-  <text x="610" y="638" class="code-sm">enum TrickPlugin {}</text>
-  <line x1="606" y1="644" x2="842" y2="644" stroke="#d1fae5"/>
-  <text x="610" y="662" fill="#047857" font-size="11" font-weight="600">links AnimalInterface, TrickInterface,</text>
-  <text x="610" y="678" fill="#047857" font-size="11" font-weight="600">DemoLogging, DyLibRuntimeLoader</text>
+  <rect x="596" y="520" width="256" height="172" rx="8" fill="#ffffff" stroke="#f97316"/>
+  <text x="610" y="544" class="t h" font-size="14">DogImplementation.framework</text>
+  <text x="610" y="566" class="code-sm">@DyLibExport(Animal.self)</text>
+  <text x="610" y="584" class="code-sm">public struct Dog: Animal</text>
+  <text x="610" y="608" class="code-sm">@DyLibConnect(Trick.self,</text>
+  <text x="610" y="624" class="code-sm">  framework: "TrickImplementation",</text>
+  <text x="610" y="640" class="code-sm">  logger: DebugLogger.self)</text>
+  <text x="610" y="656" class="code-sm">enum TrickPlugin {}</text>
+  <line x1="606" y1="664" x2="842" y2="664" stroke="#d1fae5"/>
+  <text x="610" y="681" fill="#047857" font-size="11" font-weight="600">links DemoLogging, DyLibRuntimeLoader</text>
 
   <!-- plugin -> plugin -->
-  <path d="M450,688 L450,738" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
-  <path d="M724,688 L724,738" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
-  <text x="518" y="711" fill="#c2410c" font-size="11" text-anchor="middle">lazy dlopen,</text>
-  <text x="518" y="725" fill="#c2410c" font-size="11" text-anchor="middle">plugin to plugin</text>
-  <text x="655" y="711" fill="#c2410c" font-size="11" text-anchor="middle">from Cat.speak()</text>
-  <text x="655" y="725" fill="#c2410c" font-size="11" text-anchor="middle">and Dog.speak()</text>
+  <path d="M450,692 L450,742" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
+  <path d="M724,692 L724,742" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
+  <text x="518" y="715" fill="#c2410c" font-size="11" text-anchor="middle">lazy dlopen,</text>
+  <text x="518" y="729" fill="#c2410c" font-size="11" text-anchor="middle">plugin to plugin</text>
+  <text x="655" y="715" fill="#c2410c" font-size="11" text-anchor="middle">from Cat.speak()</text>
+  <text x="655" y="729" fill="#c2410c" font-size="11" text-anchor="middle">and Dog.speak()</text>
 
   <!-- Trick -->
-  <rect x="380" y="740" width="472" height="100" rx="8" fill="#ffffff" stroke="#f97316"/>
-  <text x="396" y="764" class="t h" font-size="15">TrickImplementation.framework</text>
-  <text x="396" y="786" class="code">@DyLibExport(Trick.self)</text>
-  <text x="396" y="804" class="code">public struct Backflip: Trick</text>
-  <text x="626" y="786" class="muted" font-size="12">perform() returns "backflip"</text>
-  <text x="626" y="804" class="muted" font-size="12">one image, shared by Cat and Dog</text>
-  <line x1="390" y1="814" x2="842" y2="814" stroke="#d1fae5"/>
-  <text x="396" y="830" fill="#047857" font-size="11" font-weight="600">links TrickInterface, DyLibRuntimeLoader</text>
+  <rect x="380" y="744" width="472" height="100" rx="8" fill="#ffffff" stroke="#f97316"/>
+  <text x="396" y="768" class="t h" font-size="15">TrickImplementation.framework</text>
+  <text x="396" y="790" class="code">@DyLibExport(Trick.self)</text>
+  <text x="396" y="808" class="code">public struct Backflip: Trick</text>
+  <text x="626" y="790" class="muted" font-size="12">perform() returns "backflip"</text>
+  <text x="626" y="808" class="muted" font-size="12">one image, shared by Cat and Dog</text>
+  <line x1="390" y1="818" x2="842" y2="818" stroke="#d1fae5"/>
+  <text x="396" y="834" fill="#047857" font-size="11" font-weight="600">links DyLibRuntimeLoader</text>
 
   <!-- Logging note -->
-  <text x="62" y="722" class="t h" font-size="12">Debug builds:</text>
-  <text x="62" y="740" class="muted" font-size="12">DebugLogger prints one line per</text>
-  <text x="62" y="758" class="muted" font-size="12">real load, i.e. on each connection's</text>
-  <text x="62" y="776" class="muted" font-size="12">first use. Release builds print nothing.</text>
+  <text x="62" y="726" class="t h" font-size="12">Debug builds:</text>
+  <text x="62" y="744" class="muted" font-size="12">DebugLogger prints one line per</text>
+  <text x="62" y="762" class="muted" font-size="12">real load, i.e. on each connection's</text>
+  <text x="62" y="780" class="muted" font-size="12">first use. Release builds print nothing.</text>
 
-  <text x="20" y="914" class="muted" font-size="12">Each plugin links its interfaces through load commands that resolve via @rpath (@executable_path/Frameworks) to the copies the app</text>
-  <text x="20" y="930" class="muted" font-size="12">already loaded, so each shared module exists once per process. All eight frameworks are in the Embed Frameworks phase; the app itself</text>
-  <text x="20" y="946" class="muted" font-size="12">links only the two interfaces, DemoLogging and the runtime.</text>
+  <text x="20" y="918" class="muted" font-size="12">Each plugin links its interfaces through load commands that resolve via @rpath (@executable_path/Frameworks) to the copies the app</text>
+  <text x="20" y="934" class="muted" font-size="12">already loaded, so each shared module exists once per process. All eight frameworks are in the Embed Frameworks phase; the app itself</text>
+  <text x="20" y="950" class="muted" font-size="12">links only the two interfaces, DemoLogging and the runtime.</text>
 </svg>
