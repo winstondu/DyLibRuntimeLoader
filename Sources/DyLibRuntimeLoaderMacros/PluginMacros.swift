@@ -454,6 +454,7 @@ public struct DyLibConnectMacro: MemberMacro, ExtensionMacro {
         let frameworkLiteral: String
         let dependencies: [String]
         let bundleExpression: String?
+        let loggerName: String?
     }
 
     public static func expansion(
@@ -477,6 +478,7 @@ public struct DyLibConnectMacro: MemberMacro, ExtensionMacro {
             .map { "\($0).library" }
             .joined(separator: ", ")
         let bundleArgument = arguments.bundleExpression.map { ", bundle: \($0)" } ?? ""
+        let loggerArgument = arguments.loggerName.map { "logger: \($0).self, " } ?? ""
 
         return [
             DeclSyntax(stringLiteral: """
@@ -485,7 +487,7 @@ public struct DyLibConnectMacro: MemberMacro, ExtensionMacro {
             }
             """),
             DeclSyntax(stringLiteral: """
-            private static let _dylibLazy = DyLibLazyPlugin<\(specName)>(library: { library })
+            private static let _dylibLazy = DyLibLazyPlugin<\(specName)>(\(loggerArgument)library: { library })
             """),
             DeclSyntax(stringLiteral: """
             public static var instance: any \(arguments.interfaceName) {
@@ -615,11 +617,30 @@ public struct DyLibConnectMacro: MemberMacro, ExtensionMacro {
             .map(\.expression.trimmedDescription)
             .flatMap { $0 == "nil" ? nil : $0 }
 
+        var loggerName: String?
+        if let loggerArgument = argumentList.first(where: { $0.label?.text == "logger" }),
+           loggerArgument.expression.as(NilLiteralExprSyntax.self) == nil {
+            guard let name = metatypeBaseName(from: loggerArgument.expression) else {
+                if diagnose {
+                    context.diagnose(Diagnostic(
+                        node: Syntax(loggerArgument.expression),
+                        message: MacroDiagnostic(
+                            "connect.invalidLogger",
+                            "logger must be a metatype expression of a DyLibLoadLogger type such as PluginLog.self"
+                        )
+                    ))
+                }
+                return nil
+            }
+            loggerName = name
+        }
+
         return Arguments(
             interfaceName: interfaceName,
             frameworkLiteral: frameworkLiteral,
             dependencies: dependencyNames,
-            bundleExpression: bundleExpression
+            bundleExpression: bundleExpression,
+            loggerName: loggerName
         )
     }
 

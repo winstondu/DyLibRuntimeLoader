@@ -167,7 +167,7 @@ The original v1 of this library mimicked the 2016 stage: handwritten `@_cdecl` s
 
 ## Usage patterns
 
-**Plugins that load plugins.** A connection works anywhere, including inside a plugin. The demo's `Dog` lazily loads a `Trick` plugin only when it speaks:
+**Plugins that load plugins.** A connection works anywhere, including inside a plugin. The demo's `Cat` and `Dog` each lazily load a `Trick` plugin only when they speak (`Mouse` uses none):
 
 ```swift
 @DyLibConnect(Trick.self, framework: "TrickImplementation")
@@ -204,16 +204,66 @@ let dog = try AnimalPluginSpec.load(from: DyLibLibrary(
 
 **Open flags.** `DyLibLibrary` defaults to `[.now, .local, .first]`. `RTLD_FIRST` confines symbol lookup to the requested image rather than its dependencies. The registry is keyed by canonical path, so the first open's flags win while the image stays resident.
 
+### Logging lazy loads
+
+To see when a plugin actually loads and how long the first call waited, give the connection a `DyLibLoadLogger` type. It is a type, not an instance, so it is a plain compile-time argument like the interface:
+
+```swift
+enum PluginLog: DyLibLoadLogger {
+    static let log = Logger(subsystem: "com.example.app", category: "plugins")
+
+    static func didLoad(_ event: DyLibLoadResult) {
+        let outcome = event.error.map { "failed: \($0)" } ?? "ok"
+        log.info("Loaded \(event.interface) from \(event.path) in \(event.duration)s: \(outcome)")
+    }
+}
+
+@DyLibConnect(Animal.self, framework: "AnimalImplementation", logger: PluginLog.self)
+enum DogPlugin {}
+```
+
+- One event per **real load**. Cache hits are silent, and because failures are not cached, each retry produces its own event.
+- `didLoad` fires on success and on failure, so a load that is about to trap a non-throwing proxy requirement is logged first. `willLoad` is optional and defaults to a no-op.
+- `duration` is in seconds on the monotonic uptime clock, from the first call to a usable instance, covering `dlopen` of the image and its dependencies, the symbol lookup, header validation, and the factory call.
+- Leave `logger:` out and nothing is logged; the connection expands exactly as before and reads no clock. There is no global logger, so two connections can log differently.
+- Callbacks run outside `DyLibLoader`'s lock but inside the connection's own, so a logger must not call into the connection it is logging.
+
 ## Setting up an iOS app
+
+### How the app packages interfaces vs. implementations
+
+Both kinds of framework end up in the same place, `YourApp.app/Frameworks/`, signed with the app. What differs is whether the app binary *references* them. Embedding copies a framework into the bundle; linking adds an `LC_LOAD_DYLIB` load command that makes dyld open it before `main()`. Interfaces get both. Implementations get only the first.
+
+| | Interface modules and the runtime | Implementations (plugins) |
+| --- | --- | --- |
+| Examples in the demo | `DyLibRuntimeLoader`, `AnimalInterface`, `TrickInterface`, `DemoLogging` | `CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation` |
+| How it enters the project | Swift package with a `.dynamic` library product, or a framework target in the app project (`DemoLogging`) | Framework target in the app project (or a prebuilt `.xcframework`) |
+| Link Binary With Libraries | **Yes** | **No** |
+| Embed Frameworks (Code Sign On Copy) | Yes | Yes |
+| `import`ed by app code | Yes, the app calls the protocols | **Never**, the app names it only as a string in `@DyLibConnect(framework:)` |
+| Load command in the app binary | Yes | None (`otool -L` won't list it) |
+| When it is mapped | By dyld at launch, before `main()` | By `dlopen` on the first call through its connection |
+| If it is missing from the bundle | The app cannot launch | The app launches; that connection throws `failedToOpen` when used |
+| Copies per process | Exactly one, shared by the app and every plugin | One, opened once and reference-counted by `DyLibLoader` |
+
+A few details make this work:
+
+- **Build order without linking.** The app target lists each implementation as a *target dependency* so Xcode builds it before the Embed Frameworks phase copies it, but the link phase never mentions it.
+- **Plugins link interfaces, never each other.** Each implementation links the interfaces it uses and the runtime, which is how it resolves `Animal`, `Trick`, and `DebugLogger` to the app's single copies through `@rpath` (`@executable_path/Frameworks`). Linking against a `.dynamic` product or a framework target records a load command but copies nothing, so the plugin doesn't carry its own interface copy. A plugin reaches another plugin only through a connection (`Dog` → `TrickImplementation`), never by linking it.
+- **Only the app embeds.** Plugins don't embed their dependencies. The app embeds every framework exactly once, which is [the golden rule](#the-golden-rule-one-copy-of-every-shared-module) applied to packaging.
+
+### Steps
 
 The [demo](Demo/DynamicLoadingDemo) shows the full setup:
 
-1. Add the runtime and each interface module as Swift packages. They are `.dynamic` products, so they are **linked and embedded**.
-2. Add each implementation as a **framework target** (`AnimalImplementation`, `TrickImplementation`) that depends on its interface.
+1. Add the runtime and each interface module as Swift packages (`AnimalInterface`, `TrickInterface`). They are `.dynamic` products, so they are **linked and embedded**. The shared `DebugLogger` lives in `DemoLogging`, a **framework target** in the app project that is also **linked and embedded** by the app. Being linked is what makes it an interface-side module, not how it is packaged.
+2. Add each implementation as a **framework target** (`CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation`) that depends on its interface. `Cat` and `Dog` also depend on `TrickInterface` and link `DemoLogging.framework` (without embedding it) because they declare their own `Trick` connection.
 3. In the app target's **Embed Frameworks** build phase, add the implementation frameworks, but do **not** add them to *Link Binary With Libraries* and do not `import` them. This puts them in `YourApp.app/Frameworks/` with no load command in the app binary.
-4. Declare `@DyLibConnect(…, framework: "AnimalImplementation")` and call through `instance`. `DyLibLibrary.framework(_:)` resolves `Frameworks/<Name>.framework/<Name>`, including the macOS `Contents/Frameworks` layout.
+4. Declare `@DyLibConnect(Animal.self, framework: "CatImplementation", logger: DebugLogger.self)` (and likewise for `Mouse` and `Dog`) and call through `instance`. `DyLibLibrary.framework(_:)` resolves `Frameworks/<Name>.framework/<Name>`, including the macOS `Contents/Frameworks` layout.
 
-To see the difference, delete `AnimalImplementation.framework` from a simulator build's `Frameworks/` folder and relaunch. The app starts normally and fails only when the plugin is requested. Delete `AnimalInterface.framework` and the app cannot launch at all.
+The app's `Frameworks/` folder then contains `DyLibRuntimeLoader`, `AnimalInterface`, `TrickInterface`, and `DemoLogging` (linked), plus `CatImplementation`, `MouseImplementation`, `DogImplementation`, and `TrickImplementation` (not linked; `otool -L` on the app binary never lists them). Nothing loads at launch. Tapping **Run Cat**, **Run Mouse**, or **Run Dog** performs that animal's first `dlopen`, and in Debug builds `DebugLogger` prints a line such as `[DyLib] Animal from CatImplementation in 12.06 ms (ok)`, followed by one for `Trick` when `Cat` or `Dog` speaks. A second tap is a cache hit and prints nothing.
+
+To see the difference, delete `CatImplementation.framework` from a simulator build's `Frameworks/` folder and relaunch. The app starts normally and fails only when **Run Cat** is tapped. Delete `AnimalInterface.framework` and the app cannot launch at all.
 
 ## App Store review
 
@@ -264,7 +314,7 @@ All loader failures are `DyLibError`:
 ├── Tests/                          Runtime and macro tests (enabled with DYLIB_DEV=1)
 ├── Examples/                       SwiftPM end-to-end example: two interfaces, three plugins, one host
 │   └── run.sh                      Builds, assembles, runs, and verifies the output
-├── Demo/                           iOS app: embedded-but-unlinked plugin frameworks loaded on first use
+├── Demo/                           iOS app: three animal plugins, a trick plugin, and a shared DebugLogger, loaded on tap
 └── docs/diagrams/                  Diagrams used in this README
 ```
 

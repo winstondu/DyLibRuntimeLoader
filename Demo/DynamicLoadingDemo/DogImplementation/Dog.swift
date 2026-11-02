@@ -1,8 +1,9 @@
 import AnimalInterface
+import DemoLogging
 import TrickInterface
 import DyLibRuntimeLoader
 
-@DyLibConnect(Trick.self, framework: "TrickImplementation")
+@DyLibConnect(Trick.self, framework: "TrickImplementation", logger: DebugLogger.self)
 enum TrickPlugin {}
 
 @DyLibExport(Animal.self)

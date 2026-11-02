@@ -67,6 +67,46 @@ private final class LockedPlugins: @unchecked Sendable {
     }
 }
 
+/// Collects every logger callback. Shared static state, so the suite that
+/// uses it is serialized and each test calls `reset()` first.
+private final class LoadEventRecorder: @unchecked Sendable {
+    private let lock = NSLock()
+    private var starts: [DyLibLoadStart] = []
+    private var results: [DyLibLoadResult] = []
+
+    func record(_ event: DyLibLoadStart) {
+        lock.withLock { starts.append(event) }
+    }
+
+    func record(_ event: DyLibLoadResult) {
+        lock.withLock { results.append(event) }
+    }
+
+    func reset() {
+        lock.withLock {
+            starts = []
+            results = []
+        }
+    }
+
+    var startEvents: [DyLibLoadStart] { lock.withLock { starts } }
+    var resultEvents: [DyLibLoadResult] { lock.withLock { results } }
+}
+
+private enum RecordingLogger: DyLibLoadLogger {
+    static let recorder = LoadEventRecorder()
+
+    static func willLoad(_ event: DyLibLoadStart) { recorder.record(event) }
+    static func didLoad(_ event: DyLibLoadResult) { recorder.record(event) }
+}
+
+/// Exercises the protocol's default `willLoad`.
+private enum ResultOnlyLogger: DyLibLoadLogger {
+    static let recorder = LoadEventRecorder()
+
+    static func didLoad(_ event: DyLibLoadResult) { recorder.record(event) }
+}
+
 @Suite struct DyLibRuntimeLoaderTests {
     @Test func generatedLazyProxyDefersAndCachesResolution() throws {
         let counter = LockedCounter()
@@ -358,5 +398,142 @@ private final class LockedPlugins: @unchecked Sendable {
         #expect(loadedPlugins.allSatisfy { $0 === expected })
         #expect(counter.current == 1)
         #expect(connection.isLoaded)
+    }
+}
+
+@Suite(.serialized) struct DyLibLoadLoggerTests {
+    private let path = "/tmp/LoggedPlugin.framework/LoggedPlugin"
+
+    @Test func successfulLoadReportsStartAndTimedResult() throws {
+        RecordingLogger.recorder.reset()
+        let expected = LazyTestPlugin()
+        let connection = DyLibLazyPlugin<LazyTestSpec>(
+            logger: RecordingLogger.self,
+            path: path,
+            loadOperation: {
+                Thread.sleep(forTimeInterval: 0.01)
+                return expected
+            }
+        )
+
+        let instance = try connection.loadIfNeeded()
+        #expect(instance === expected)
+
+        let starts = RecordingLogger.recorder.startEvents
+        let results = RecordingLogger.recorder.resultEvents
+        #expect(starts.count == 1)
+        #expect(starts.first?.interface == "LazyTestPlugin")
+        #expect(starts.first?.path == path)
+        #expect(results.count == 1)
+        #expect(results.first?.interface == "LazyTestPlugin")
+        #expect(results.first?.path == path)
+        #expect(results.first?.error == nil)
+        #expect(results.first.map { $0.duration >= 0.01 } == true)
+    }
+
+    @Test func failedLoadReportsErrorBeforeRethrowing() {
+        RecordingLogger.recorder.reset()
+        let failure = DyLibError.failedToOpen(path: path, reason: "missing")
+        let connection = DyLibLazyPlugin<LazyTestSpec>(
+            logger: RecordingLogger.self,
+            path: path,
+            loadOperation: { throw failure }
+        )
+
+        do {
+            _ = try connection.loadIfNeeded()
+            Issue.record("Expected the lazy load to fail")
+        } catch {
+            #expect(error as? DyLibError == failure)
+        }
+
+        let results = RecordingLogger.recorder.resultEvents
+        #expect(RecordingLogger.recorder.startEvents.count == 1)
+        #expect(results.count == 1)
+        #expect(results.first?.error == failure)
+        #expect(results.first?.path == path)
+        #expect(!connection.isLoaded)
+    }
+
+    @Test func cacheHitsProduceNoEvents() throws {
+        RecordingLogger.recorder.reset()
+        let connection = DyLibLazyPlugin<LazyTestSpec>(
+            logger: RecordingLogger.self,
+            path: path,
+            loadOperation: { LazyTestPlugin() }
+        )
+
+        _ = try connection.loadIfNeeded()
+        _ = try connection.loadIfNeeded()
+        _ = try connection.loadIfNeeded()
+
+        #expect(RecordingLogger.recorder.startEvents.count == 1)
+        #expect(RecordingLogger.recorder.resultEvents.count == 1)
+    }
+
+    @Test func retryAfterFailureProducesSecondEvent() throws {
+        RecordingLogger.recorder.reset()
+        let counter = LockedCounter()
+        let failure = DyLibError.symbolNotFound(symbol: "unused", path: path)
+        let connection = DyLibLazyPlugin<LazyTestSpec>(
+            logger: RecordingLogger.self,
+            path: path,
+            loadOperation: {
+                if counter.increment() == 1 {
+                    throw failure
+                }
+                return LazyTestPlugin()
+            }
+        )
+
+        _ = try? connection.loadIfNeeded()
+        _ = try connection.loadIfNeeded()
+
+        let results = RecordingLogger.recorder.resultEvents
+        #expect(RecordingLogger.recorder.startEvents.count == 2)
+        #expect(results.count == 2)
+        #expect(results.first?.error == failure)
+        #expect(results.last?.error == nil)
+    }
+
+    @Test func willLoadDefaultsToNoOp() throws {
+        ResultOnlyLogger.recorder.reset()
+        let connection = DyLibLazyPlugin<LazyTestSpec>(
+            logger: ResultOnlyLogger.self,
+            path: path,
+            loadOperation: { LazyTestPlugin() }
+        )
+
+        _ = try connection.loadIfNeeded()
+
+        #expect(ResultOnlyLogger.recorder.startEvents.isEmpty)
+        #expect(ResultOnlyLogger.recorder.resultEvents.count == 1)
+    }
+
+    @Test func realLoaderFailureIsLoggedWithLibraryPath() {
+        RecordingLogger.recorder.reset()
+        let libraryPath = "/usr/lib/libSystem.B.dylib"
+        let connection = DyLibLazyPlugin<MissingEntrySpec>(
+            logger: RecordingLogger.self,
+            loader: DyLibLoader(),
+            library: { DyLibLibrary(path: libraryPath) }
+        )
+
+        do {
+            _ = try connection.loadIfNeeded()
+            Issue.record("Expected the entry symbol lookup to fail")
+        } catch {
+            #expect(error as? DyLibError == .symbolNotFound(
+                symbol: MissingEntrySpec.symbolName,
+                path: DyLibLoader.canonicalPath(libraryPath)
+            ))
+        }
+
+        let results = RecordingLogger.recorder.resultEvents
+        #expect(RecordingLogger.recorder.startEvents.first?.path == libraryPath)
+        #expect(results.count == 1)
+        #expect(results.first?.interface == "Any")
+        #expect(results.first?.path == libraryPath)
+        #expect(results.first?.error != nil)
     }
 }
