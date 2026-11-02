@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="922" viewBox="0 0 1000 922" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>Meta FBiOS dylib architecture mapped to DyLibRuntimeLoader v2</title>
+<style>
+.t{font-size:15px;font-weight:600;fill:#1f2328}
+.b{font-size:13px;fill:#3d444d}
+.code{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;font-size:12.5px;fill:#8250df}
+.hd{font-size:17px;font-weight:700}
+</style>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#57606a"/></marker></defs>
+<rect width="1000" height="922" fill="#ffffff"/>
+<text x="500.0" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2328">Meta FBiOS → DyLibRuntimeLoader v2</text>
+<text x="500.0" y="64" text-anchor="middle" class="b">Same goal (load feature code only when needed), problem by problem</text>
+<rect x="30" y="92" width="410" height="38" rx="8" fill="#0969da"/>
+<text x="235.0" y="117" text-anchor="middle" class="hd" fill="#ffffff">Meta FBiOS (2016–2018)</text>
+<rect x="560" y="92" width="410" height="38" rx="8" fill="#1a7f37"/>
+<text x="765.0" y="117" text-anchor="middle" class="hd" fill="#ffffff">DyLibRuntimeLoader v2</text>
+<rect x="30" y="150" width="410" height="108" rx="8" fill="#ddf4ff" stroke="#54aeff"/>
+<text x="46" y="176" class="t">2016 · Lazily loaded dylibs</text>
+<text x="46" y="200" class="b">Product code moved into dylibs that load lazily,</text>
+<text x="46" y="219" class="b">so it stays off the pre-main startup path.</text>
+<rect x="560" y="150" width="410" height="108" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
+<text x="576" y="176" class="t">Embedded, unlinked plugin frameworks</text>
+<text x="576" y="200" class="b">Plugins ship embedded in the app but are not</text>
+<text x="576" y="219" class="b">linked; the host calls <tspan class="code">dlopen</tspan> on first use.</text>
+<line x1="450" y1="204.0" x2="550" y2="204.0" stroke="#57606a" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="30" y="272" width="410" height="108" rx="8" fill="#ddf4ff" stroke="#54aeff"/>
+<text x="46" y="298" class="t">Class lookup by string</text>
+<text x="46" y="322" class="b"><tspan class="code">NSClassFromString()</tspan> fails for classes that</text>
+<text x="46" y="341" class="b">live in a dylib that has not loaded yet.</text>
+<rect x="560" y="272" width="410" height="108" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
+<text x="576" y="298" class="t">Typed spec, derived entry symbol</text>
+<text x="576" y="322" class="b">No string lookup: <tspan class="code">@DyLibInterface</tspan> generates</text>
+<text x="576" y="341" class="b"><tspan class="code">AnimalPluginSpec</tspan> and <tspan class="code">__dylib_entry_Animal</tspan>.</text>
+<line x1="450" y1="326.0" x2="550" y2="326.0" stroke="#57606a" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="30" y="394" width="410" height="108" rx="8" fill="#ddf4ff" stroke="#54aeff"/>
+<text x="46" y="420" class="t">Call-site helper + dylib enum</text>
+<text x="46" y="444" class="b">Calls wrapped in a load-if-needed helper naming a</text>
+<text x="46" y="463" class="b">hand-written dylib enum; a wrong enum only</text>
+<text x="46" y="482" class="b">fails at runtime.</text>
+<rect x="560" y="394" width="410" height="108" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
+<text x="576" y="420" class="t"><tspan class="code">@DyLibConnect</tspan> + <tspan class="code">AnimalLazyProxy</tspan></text>
+<text x="576" y="444" class="b"><tspan class="code">DogPlugin.instance.speak()</tspan></text>
+<text x="576" y="463" class="b">The first call loads the framework; loading is</text>
+<text x="576" y="482" class="b">invisible at the call site.</text>
+<line x1="450" y1="448.0" x2="550" y2="448.0" stroke="#57606a" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="30" y="516" width="410" height="108" rx="8" fill="#ddf4ff" stroke="#54aeff"/>
+<text x="46" y="542" class="t">2017–18 · Buck graph + codegen</text>
+<text x="46" y="566" class="b">Buck queries map code to dylibs; build-time</text>
+<text x="46" y="585" class="b">codegen emits the <tspan class="code">FBCallFunction</tspan> map and the</text>
+<text x="46" y="604" class="b">plugin registry.</text>
+<rect x="560" y="516" width="410" height="108" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
+<text x="576" y="542" class="t">Swift macros in the normal toolchain</text>
+<text x="576" y="566" class="b">Macros generate the glue at compile time inside</text>
+<text x="576" y="585" class="b">SwiftPM / Xcode. No custom build system.</text>
+<line x1="450" y1="570.0" x2="550" y2="570.0" stroke="#57606a" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="30" y="638" width="410" height="108" rx="8" fill="#ddf4ff" stroke="#54aeff"/>
+<text x="46" y="664" class="t">Build-time plugin validation</text>
+<text x="46" y="688" class="b">Startup-path dylib loads, missing plugins and</text>
+<text x="46" y="707" class="b">competing plugins surface as build errors</text>
+<text x="46" y="726" class="b">or warnings.</text>
+<rect x="560" y="638" width="410" height="108" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
+<text x="576" y="664" class="t">Compiler checks + runtime guards</text>
+<text x="576" y="688" class="b">Compile time: conformance, derived symbol names,</text>
+<text x="576" y="707" class="b">typed connection dependencies.</text>
+<text x="576" y="726" class="b">Runtime: header magic, ABI version, spec identity.</text>
+<line x1="450" y1="692.0" x2="550" y2="692.0" stroke="#57606a" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="30" y="760" width="410" height="108" rx="8" fill="#ddf4ff" stroke="#54aeff"/>
+<text x="46" y="786" class="t">Cost Meta noted</text>
+<text x="46" y="810" class="b">Further from idiomatic iOS; the generated</text>
+<text x="46" y="829" class="b">indirection is hard to find, and plugin errors</text>
+<text x="46" y="848" class="b">can be confusing to debug.</text>
+<rect x="560" y="760" width="410" height="108" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
+<text x="576" y="786" class="t">Plain Swift, visible glue</text>
+<text x="576" y="810" class="b">Interfaces are ordinary Swift protocols; generated</text>
+<text x="576" y="829" class="b">code is visible via Xcode “Expand Macro”.</text>
+<line x1="450" y1="814.0" x2="550" y2="814.0" stroke="#57606a" stroke-width="2" marker-end="url(#ah)"/>
+<text x="500.0" y="906" text-anchor="middle" font-size="11" fill="#57606a">Meta side paraphrased from engineering.fb.com, “The evolution of Facebook’s iOS app architecture” (2023)</text>
+</svg>
