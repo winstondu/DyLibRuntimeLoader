@@ -26,7 +26,6 @@
 		BB0000000000000000000005 /* Dynasty in Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000008 /* Dynasty */; };
 		BB0000000000000000000006 /* TrickImplementation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000002 /* TrickImplementation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BB0000000000000000000012 /* TrickInterface in Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000013 /* TrickInterface */; };
-		BB0000000000000000000014 /* TrickInterface in Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000015 /* TrickInterface */; };
 		BB0000000000000000000016 /* TrickInterface in Embed Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000015 /* TrickInterface */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		DD0000000000000000000003 /* Cat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000000000000000000001 /* Cat.swift */; };
 		DD0000000000000000000004 /* AnimalInterface in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000000000000000000007 /* AnimalInterface */; };
@@ -146,7 +145,6 @@
 			files = (
 				5A6DB0442A9F1E5500E87643 /* AnimalInterface in Frameworks */,
 				5A6DB0462A9F1E5B00E87643 /* Dynasty in Frameworks */,
-				BB0000000000000000000014 /* TrickInterface in Frameworks */,
 				FF0000000000000000000002 /* DemoLogging.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -741,6 +739,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl,-dead_strip_dylibs",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.gxs.DynamicLoadingDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -770,6 +772,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl,-dead_strip_dylibs",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.gxs.DynamicLoadingDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
