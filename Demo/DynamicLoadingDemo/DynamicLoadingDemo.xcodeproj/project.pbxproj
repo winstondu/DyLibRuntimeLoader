@@ -17,7 +17,7 @@
 		AA0000000000000000000003 /* Dog.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000001 /* Dog.swift */; };
 		AA0000000000000000000004 /* AnimalInterface in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000007 /* AnimalInterface */; };
 		AA0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000008 /* DyLibRuntimeLoader */; };
-		AA0000000000000000000006 /* AnimalImplementation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000002 /* AnimalImplementation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AA0000000000000000000006 /* DogImplementation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000002 /* DogImplementation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A6DB02C2A9F1E1F00E87643 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6DB02B2A9F1E1F00E87643 /* AppDelegate.swift */; };
 		5A6DB02E2A9F1E1F00E87643 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6DB02D2A9F1E1F00E87643 /* SceneDelegate.swift */; };
 		5A6DB0302A9F1E1F00E87643 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6DB02F2A9F1E1F00E87643 /* ViewController.swift */; };
@@ -28,6 +28,19 @@
 		5A6DB0462A9F1E5B00E87643 /* DyLibRuntimeLoader in Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0452A9F1E5B00E87643 /* DyLibRuntimeLoader */; };
 		5A6DB0472A9F1E5B00E87643 /* DyLibRuntimeLoader in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0452A9F1E5B00E87643 /* DyLibRuntimeLoader */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5AC3E0112A9F216B00BBD9F9 /* AnimalInterface in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0432A9F1E5500E87643 /* AnimalInterface */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		DD0000000000000000000003 /* Cat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000000000000000000001 /* Cat.swift */; };
+		DD0000000000000000000004 /* AnimalInterface in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000000000000000000007 /* AnimalInterface */; };
+		DD0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000000000000000000008 /* DyLibRuntimeLoader */; };
+		DD0000000000000000000006 /* CatImplementation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD0000000000000000000002 /* CatImplementation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD0000000000000000000012 /* TrickInterface in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000000000000000000013 /* TrickInterface */; };
+		EE0000000000000000000003 /* Mouse.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0000000000000000000001 /* Mouse.swift */; };
+		EE0000000000000000000004 /* AnimalInterface in Frameworks */ = {isa = PBXBuildFile; productRef = EE0000000000000000000007 /* AnimalInterface */; };
+		EE0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */ = {isa = PBXBuildFile; productRef = EE0000000000000000000008 /* DyLibRuntimeLoader */; };
+		EE0000000000000000000006 /* MouseImplementation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EE0000000000000000000002 /* MouseImplementation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FF0000000000000000000002 /* DemoLogging in Frameworks */ = {isa = PBXBuildFile; productRef = FF0000000000000000000001 /* DemoLogging */; };
+		FF0000000000000000000003 /* DemoLogging in Embed Frameworks */ = {isa = PBXBuildFile; productRef = FF0000000000000000000001 /* DemoLogging */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		FF0000000000000000000005 /* DemoLogging in Frameworks */ = {isa = PBXBuildFile; productRef = FF0000000000000000000004 /* DemoLogging */; };
+		FF0000000000000000000007 /* DemoLogging in Frameworks */ = {isa = PBXBuildFile; productRef = FF0000000000000000000006 /* DemoLogging */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,7 +52,10 @@
 			files = (
 				5AC3E0112A9F216B00BBD9F9 /* AnimalInterface in Embed Frameworks */,
 				5A6DB0472A9F1E5B00E87643 /* DyLibRuntimeLoader in Embed Frameworks */,
-				AA0000000000000000000006 /* AnimalImplementation.framework in Embed Frameworks */,
+				FF0000000000000000000003 /* DemoLogging in Embed Frameworks */,
+				DD0000000000000000000006 /* CatImplementation.framework in Embed Frameworks */,
+				EE0000000000000000000006 /* MouseImplementation.framework in Embed Frameworks */,
+				AA0000000000000000000006 /* DogImplementation.framework in Embed Frameworks */,
 				BB0000000000000000000016 /* TrickInterface in Embed Frameworks */,
 				BB0000000000000000000006 /* TrickImplementation.framework in Embed Frameworks */,
 			);
@@ -52,7 +68,11 @@
 		BB0000000000000000000001 /* Backflip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backflip.swift; sourceTree = "<group>"; };
 		BB0000000000000000000002 /* TrickImplementation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TrickImplementation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA0000000000000000000001 /* Dog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dog.swift; sourceTree = "<group>"; };
-		AA0000000000000000000002 /* AnimalImplementation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AnimalImplementation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA0000000000000000000002 /* DogImplementation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DogImplementation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD0000000000000000000001 /* Cat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cat.swift; sourceTree = "<group>"; };
+		DD0000000000000000000002 /* CatImplementation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CatImplementation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE0000000000000000000001 /* Mouse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mouse.swift; sourceTree = "<group>"; };
+		EE0000000000000000000002 /* MouseImplementation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MouseImplementation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A6DB0282A9F1E1F00E87643 /* DynamicLoadingDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DynamicLoadingDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A6DB02B2A9F1E1F00E87643 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5A6DB02D2A9F1E1F00E87643 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -71,6 +91,7 @@
 				5A6DB0442A9F1E5500E87643 /* AnimalInterface in Frameworks */,
 				5A6DB0462A9F1E5B00E87643 /* DyLibRuntimeLoader in Frameworks */,
 				BB0000000000000000000014 /* TrickInterface in Frameworks */,
+				FF0000000000000000000002 /* DemoLogging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +102,7 @@
 				AA0000000000000000000004 /* AnimalInterface in Frameworks */,
 				AA0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */,
 				BB0000000000000000000012 /* TrickInterface in Frameworks */,
+				FF0000000000000000000005 /* DemoLogging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +115,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DD000000000000000000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD0000000000000000000004 /* AnimalInterface in Frameworks */,
+				DD0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */,
+				DD0000000000000000000012 /* TrickInterface in Frameworks */,
+				FF0000000000000000000007 /* DemoLogging in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE000000000000000000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE0000000000000000000004 /* AnimalInterface in Frameworks */,
+				EE0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -100,7 +142,9 @@
 			isa = PBXGroup;
 			children = (
 				5A6DB02A2A9F1E1F00E87643 /* DynamicLoadingDemo */,
-				AA000000000000000000000B /* AnimalImplementation */,
+				DD000000000000000000000B /* CatImplementation */,
+				EE000000000000000000000B /* MouseImplementation */,
+				AA000000000000000000000B /* DogImplementation */,
 				BB000000000000000000000B /* TrickImplementation */,
 				5A6DB0292A9F1E1F00E87643 /* Products */,
 				5A6DB0422A9F1E5500E87643 /* Frameworks */,
@@ -111,7 +155,9 @@
 			isa = PBXGroup;
 			children = (
 				5A6DB0282A9F1E1F00E87643 /* DynamicLoadingDemo.app */,
-				AA0000000000000000000002 /* AnimalImplementation.framework */,
+				DD0000000000000000000002 /* CatImplementation.framework */,
+				EE0000000000000000000002 /* MouseImplementation.framework */,
+				AA0000000000000000000002 /* DogImplementation.framework */,
 				BB0000000000000000000002 /* TrickImplementation.framework */,
 			);
 			name = Products;
@@ -125,12 +171,28 @@
 			path = TrickImplementation;
 			sourceTree = "<group>";
 		};
-		AA000000000000000000000B /* AnimalImplementation */ = {
+		AA000000000000000000000B /* DogImplementation */ = {
 			isa = PBXGroup;
 			children = (
 				AA0000000000000000000001 /* Dog.swift */,
 			);
-			path = AnimalImplementation;
+			path = DogImplementation;
+			sourceTree = "<group>";
+		};
+		DD000000000000000000000B /* CatImplementation */ = {
+			isa = PBXGroup;
+			children = (
+				DD0000000000000000000001 /* Cat.swift */,
+			);
+			path = CatImplementation;
+			sourceTree = "<group>";
+		};
+		EE000000000000000000000B /* MouseImplementation */ = {
+			isa = PBXGroup;
+			children = (
+				EE0000000000000000000001 /* Mouse.swift */,
+			);
+			path = MouseImplementation;
 			sourceTree = "<group>";
 		};
 		5A6DB02A2A9F1E1F00E87643 /* DynamicLoadingDemo */ = {
@@ -169,6 +231,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../..;
 		};
+		CC0000000000000000000004 /* XCLocalSwiftPackageReference "../Animals/DemoLogging" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Animals/DemoLogging;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin PBXNativeTarget section */
@@ -184,6 +250,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				DD0000000000000000000011 /* PBXTargetDependency */,
+				EE0000000000000000000011 /* PBXTargetDependency */,
 				AA0000000000000000000011 /* PBXTargetDependency */,
 				BB0000000000000000000011 /* PBXTargetDependency */,
 			);
@@ -192,14 +260,15 @@
 				5A6DB0432A9F1E5500E87643 /* AnimalInterface */,
 				5A6DB0452A9F1E5B00E87643 /* DyLibRuntimeLoader */,
 				BB0000000000000000000015 /* TrickInterface */,
+				FF0000000000000000000001 /* DemoLogging */,
 			);
 			productName = DynamicLoadingDemo;
 			productReference = 5A6DB0282A9F1E1F00E87643 /* DynamicLoadingDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		AA000000000000000000000C /* AnimalImplementation */ = {
+		AA000000000000000000000C /* DogImplementation */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA000000000000000000000D /* Build configuration list for PBXNativeTarget "AnimalImplementation" */;
+			buildConfigurationList = AA000000000000000000000D /* Build configuration list for PBXNativeTarget "DogImplementation" */;
 			buildPhases = (
 				AA0000000000000000000009 /* Sources */,
 				AA000000000000000000000A /* Frameworks */,
@@ -208,14 +277,15 @@
 			);
 			dependencies = (
 			);
-			name = AnimalImplementation;
+			name = DogImplementation;
 			packageProductDependencies = (
 				AA0000000000000000000007 /* AnimalInterface */,
 				AA0000000000000000000008 /* DyLibRuntimeLoader */,
 				BB0000000000000000000013 /* TrickInterface */,
+				FF0000000000000000000004 /* DemoLogging */,
 			);
-			productName = AnimalImplementation;
-			productReference = AA0000000000000000000002 /* AnimalImplementation.framework */;
+			productName = DogImplementation;
+			productReference = AA0000000000000000000002 /* DogImplementation.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		BB000000000000000000000C /* TrickImplementation */ = {
@@ -238,6 +308,48 @@
 			productReference = BB0000000000000000000002 /* TrickImplementation.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		DD000000000000000000000C /* CatImplementation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD000000000000000000000D /* Build configuration list for PBXNativeTarget "CatImplementation" */;
+			buildPhases = (
+				DD0000000000000000000009 /* Sources */,
+				DD000000000000000000000A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CatImplementation;
+			packageProductDependencies = (
+				DD0000000000000000000007 /* AnimalInterface */,
+				DD0000000000000000000008 /* DyLibRuntimeLoader */,
+				DD0000000000000000000013 /* TrickInterface */,
+				FF0000000000000000000006 /* DemoLogging */,
+			);
+			productName = CatImplementation;
+			productReference = DD0000000000000000000002 /* CatImplementation.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		EE000000000000000000000C /* MouseImplementation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EE000000000000000000000D /* Build configuration list for PBXNativeTarget "MouseImplementation" */;
+			buildPhases = (
+				EE0000000000000000000009 /* Sources */,
+				EE000000000000000000000A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MouseImplementation;
+			packageProductDependencies = (
+				EE0000000000000000000007 /* AnimalInterface */,
+				EE0000000000000000000008 /* DyLibRuntimeLoader */,
+			);
+			productName = MouseImplementation;
+			productReference = EE0000000000000000000002 /* MouseImplementation.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -257,6 +369,12 @@
 					BB000000000000000000000C = {
 						CreatedOnToolsVersion = 27.0;
 					};
+					DD000000000000000000000C = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					EE000000000000000000000C = {
+						CreatedOnToolsVersion = 27.0;
+					};
 				};
 			};
 			buildConfigurationList = 5A6DB0232A9F1E1F00E87643 /* Build configuration list for PBXProject "DynamicLoadingDemo" */;
@@ -272,13 +390,16 @@
 				CC0000000000000000000001 /* XCLocalSwiftPackageReference "../Animals/AnimalInterface" */,
 				CC0000000000000000000002 /* XCLocalSwiftPackageReference "../Animals/TrickInterface" */,
 				CC0000000000000000000003 /* XCLocalSwiftPackageReference "../.." */,
+				CC0000000000000000000004 /* XCLocalSwiftPackageReference "../Animals/DemoLogging" */,
 			);
 			productRefGroup = 5A6DB0292A9F1E1F00E87643 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				5A6DB0272A9F1E1F00E87643 /* DynamicLoadingDemo */,
-				AA000000000000000000000C /* AnimalImplementation */,
+				DD000000000000000000000C /* CatImplementation */,
+				EE000000000000000000000C /* MouseImplementation */,
+				AA000000000000000000000C /* DogImplementation */,
 				BB000000000000000000000C /* TrickImplementation */,
 			);
 		};
@@ -321,6 +442,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB0000000000000000000003 /* Backflip.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD0000000000000000000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD0000000000000000000003 /* Cat.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE0000000000000000000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE0000000000000000000003 /* Mouse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -536,7 +673,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gxs.AnimalImplementation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gxs.DogImplementation;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -565,7 +702,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gxs.AnimalImplementation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gxs.DogImplementation;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -634,6 +771,122 @@
 			};
 			name = Release;
 		};
+		DD000000000000000000000E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C98S3WY53;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gxs.CatImplementation;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DD000000000000000000000F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C98S3WY53;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gxs.CatImplementation;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		EE000000000000000000000E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C98S3WY53;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gxs.MouseImplementation;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		EE000000000000000000000F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C98S3WY53;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gxs.MouseImplementation;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -655,7 +908,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AA000000000000000000000D /* Build configuration list for PBXNativeTarget "AnimalImplementation" */ = {
+		AA000000000000000000000D /* Build configuration list for PBXNativeTarget "DogImplementation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA000000000000000000000E /* Debug */,
@@ -673,6 +926,24 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		DD000000000000000000000D /* Build configuration list for PBXNativeTarget "CatImplementation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD000000000000000000000E /* Debug */,
+				DD000000000000000000000F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EE000000000000000000000D /* Build configuration list for PBXNativeTarget "MouseImplementation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE000000000000000000000E /* Debug */,
+				EE000000000000000000000F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin PBXContainerItemProxy section */
@@ -681,7 +952,7 @@
 			containerPortal = 5A6DB0202A9F1E1F00E87643 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = AA000000000000000000000C;
-			remoteInfo = AnimalImplementation;
+			remoteInfo = DogImplementation;
 		};
 	BB0000000000000000000010 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -690,18 +961,42 @@
 			remoteGlobalIDString = BB000000000000000000000C;
 			remoteInfo = TrickImplementation;
 		};
+		DD0000000000000000000010 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A6DB0202A9F1E1F00E87643 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DD000000000000000000000C;
+			remoteInfo = CatImplementation;
+		};
+		EE0000000000000000000010 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A6DB0202A9F1E1F00E87643 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EE000000000000000000000C;
+			remoteInfo = MouseImplementation;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXTargetDependency section */
 		AA0000000000000000000011 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AA000000000000000000000C /* AnimalImplementation */;
+			target = AA000000000000000000000C /* DogImplementation */;
 			targetProxy = AA0000000000000000000010 /* PBXContainerItemProxy */;
 		};
 	BB0000000000000000000011 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BB000000000000000000000C /* TrickImplementation */;
 			targetProxy = BB0000000000000000000010 /* PBXContainerItemProxy */;
+		};
+		DD0000000000000000000011 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DD000000000000000000000C /* CatImplementation */;
+			targetProxy = DD0000000000000000000010 /* PBXContainerItemProxy */;
+		};
+		EE0000000000000000000011 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EE000000000000000000000C /* MouseImplementation */;
+			targetProxy = EE0000000000000000000010 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -745,6 +1040,46 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CC0000000000000000000002 /* XCLocalSwiftPackageReference "../Animals/TrickInterface" */;
 			productName = TrickInterface;
+		};
+		DD0000000000000000000007 /* AnimalInterface */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC0000000000000000000001 /* XCLocalSwiftPackageReference "../Animals/AnimalInterface" */;
+			productName = AnimalInterface;
+		};
+		DD0000000000000000000008 /* DyLibRuntimeLoader */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC0000000000000000000003 /* XCLocalSwiftPackageReference "../.." */;
+			productName = DyLibRuntimeLoader;
+		};
+		DD0000000000000000000013 /* TrickInterface */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC0000000000000000000002 /* XCLocalSwiftPackageReference "../Animals/TrickInterface" */;
+			productName = TrickInterface;
+		};
+		EE0000000000000000000007 /* AnimalInterface */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC0000000000000000000001 /* XCLocalSwiftPackageReference "../Animals/AnimalInterface" */;
+			productName = AnimalInterface;
+		};
+		EE0000000000000000000008 /* DyLibRuntimeLoader */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC0000000000000000000003 /* XCLocalSwiftPackageReference "../.." */;
+			productName = DyLibRuntimeLoader;
+		};
+		FF0000000000000000000001 /* DemoLogging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC0000000000000000000004 /* XCLocalSwiftPackageReference "../Animals/DemoLogging" */;
+			productName = DemoLogging;
+		};
+		FF0000000000000000000004 /* DemoLogging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC0000000000000000000004 /* XCLocalSwiftPackageReference "../Animals/DemoLogging" */;
+			productName = DemoLogging;
+		};
+		FF0000000000000000000006 /* DemoLogging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC0000000000000000000004 /* XCLocalSwiftPackageReference "../Animals/DemoLogging" */;
+			productName = DemoLogging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

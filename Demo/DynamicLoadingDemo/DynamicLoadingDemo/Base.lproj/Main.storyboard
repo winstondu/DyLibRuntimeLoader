@@ -23,14 +23,38 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pp1-QY-pcm">
-                                <rect key="frame" x="126.66666666666669" y="421.33333333333331" width="140" height="35"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Load Animal"/>
-                                <connections>
-                                    <action selector="loadAnimal:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ftb-3i-NwL"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="stk-An-ml1">
+                                <rect key="frame" x="126.66666666666669" y="421.33333333333331" width="140" height="121"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="btn-Ca-t01">
+                                        <rect key="frame" x="0.0" y="0.0" width="140" height="35"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Run Cat"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="runCat"/>
+                                        <connections>
+                                            <action selector="runCat:" destination="BYZ-38-t0r" eventType="touchUpInside" id="act-Ca-t01"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="btn-Mo-us1">
+                                        <rect key="frame" x="0.0" y="43" width="140" height="35"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Run Mouse"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="runMouse"/>
+                                        <connections>
+                                            <action selector="runMouse:" destination="BYZ-38-t0r" eventType="touchUpInside" id="act-Mo-us1"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="btn-Do-g01">
+                                        <rect key="frame" x="0.0" y="86" width="140" height="35"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Run Dog"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="runDog"/>
+                                        <connections>
+                                            <action selector="runDog:" destination="BYZ-38-t0r" eventType="touchUpInside" id="act-Do-g01"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -38,8 +62,8 @@
                             <constraint firstItem="rq4-dK-swg" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Uir-tI-Y9p"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rq4-dK-swg" secondAttribute="trailing" constant="16" id="hiT-ZU-c1k"/>
                             <constraint firstItem="rq4-dK-swg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="jgK-mn-NCT"/>
-                            <constraint firstItem="pp1-QY-pcm" firstAttribute="top" secondItem="rq4-dK-swg" secondAttribute="bottom" constant="16" id="nxV-80-2tl"/>
-                            <constraint firstItem="pp1-QY-pcm" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="pYR-6b-knT"/>
+                            <constraint firstItem="stk-An-ml1" firstAttribute="top" secondItem="rq4-dK-swg" secondAttribute="bottom" constant="16" id="nxV-80-2tl"/>
+                            <constraint firstItem="stk-An-ml1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="pYR-6b-knT"/>
                             <constraint firstItem="rq4-dK-swg" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tyM-TI-fz8"/>
                         </constraints>
                     </view>

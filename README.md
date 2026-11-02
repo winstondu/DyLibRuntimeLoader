@@ -167,7 +167,7 @@ The original v1 of this library mimicked the 2016 stage: handwritten `@_cdecl` s
 
 ## Usage patterns
 
-**Plugins that load plugins.** A connection works anywhere, including inside a plugin. The demo's `Dog` lazily loads a `Trick` plugin only when it speaks:
+**Plugins that load plugins.** A connection works anywhere, including inside a plugin. The demo's `Cat` and `Dog` each lazily load a `Trick` plugin only when they speak (`Mouse` uses none):
 
 ```swift
 @DyLibConnect(Trick.self, framework: "TrickImplementation")
@@ -256,12 +256,14 @@ A few details make this work:
 
 The [demo](Demo/DynamicLoadingDemo) shows the full setup:
 
-1. Add the runtime and each interface module as Swift packages. They are `.dynamic` products, so they are **linked and embedded**.
-2. Add each implementation as a **framework target** (`AnimalImplementation`, `TrickImplementation`) that depends on its interface.
+1. Add the runtime and each interface module as Swift packages (`AnimalInterface`, `TrickInterface`, and `DemoLogging`, which holds the shared `DebugLogger`). They are `.dynamic` products, so they are **linked and embedded**.
+2. Add each implementation as a **framework target** (`CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation`) that depends on its interface. `Cat` and `Dog` also depend on `TrickInterface` and `DemoLogging` because they declare their own `Trick` connection.
 3. In the app target's **Embed Frameworks** build phase, add the implementation frameworks, but do **not** add them to *Link Binary With Libraries* and do not `import` them. This puts them in `YourApp.app/Frameworks/` with no load command in the app binary.
-4. Declare `@DyLibConnect(…, framework: "AnimalImplementation")` and call through `instance`. `DyLibLibrary.framework(_:)` resolves `Frameworks/<Name>.framework/<Name>`, including the macOS `Contents/Frameworks` layout.
+4. Declare `@DyLibConnect(Animal.self, framework: "CatImplementation", logger: DebugLogger.self)` (and likewise for `Mouse` and `Dog`) and call through `instance`. `DyLibLibrary.framework(_:)` resolves `Frameworks/<Name>.framework/<Name>`, including the macOS `Contents/Frameworks` layout.
 
-To see the difference, delete `AnimalImplementation.framework` from a simulator build's `Frameworks/` folder and relaunch. The app starts normally and fails only when the plugin is requested. Delete `AnimalInterface.framework` and the app cannot launch at all.
+The app's `Frameworks/` folder then contains `DyLibRuntimeLoader`, `AnimalInterface`, `TrickInterface`, and `DemoLogging` (linked), plus `CatImplementation`, `MouseImplementation`, `DogImplementation`, and `TrickImplementation` (not linked; `otool -L` on the app binary never lists them). Nothing loads at launch. Tapping **Run Cat**, **Run Mouse**, or **Run Dog** performs that animal's first `dlopen`, and in Debug builds `DebugLogger` prints a line such as `[DyLib] Animal from CatImplementation in 12.06 ms (ok)`, followed by one for `Trick` when `Cat` or `Dog` speaks. A second tap is a cache hit and prints nothing.
+
+To see the difference, delete `CatImplementation.framework` from a simulator build's `Frameworks/` folder and relaunch. The app starts normally and fails only when **Run Cat** is tapped. Delete `AnimalInterface.framework` and the app cannot launch at all.
 
 ## App Store review
 
@@ -312,7 +314,7 @@ All loader failures are `DyLibError`:
 ├── Tests/                          Runtime and macro tests (enabled with DYLIB_DEV=1)
 ├── Examples/                       SwiftPM end-to-end example: two interfaces, three plugins, one host
 │   └── run.sh                      Builds, assembles, runs, and verifies the output
-├── Demo/                           iOS app: embedded-but-unlinked plugin frameworks loaded on first use
+├── Demo/                           iOS app: three animal plugins, a trick plugin, and a shared DebugLogger, loaded on tap
 └── docs/diagrams/                  Diagrams used in this README
 ```
 
