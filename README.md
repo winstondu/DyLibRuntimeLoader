@@ -350,7 +350,25 @@ DYLIB_DEV=1 swift test
 
 ### Migration from v1
 
-| Deprecated v1 API | v2 replacement |
+Steve Dao's [DyLibRuntimeLoader](https://github.com/duyquang91/DyLibRuntimeLoader) v1 proved the core idea: put an implementation in a framework, open it with `dlopen`, and get an instance back through a C entry point. Dynasty keeps that idea and changes how each side of the boundary is written and checked:
+
+| | DyLibRuntimeLoader v1 | Dynasty |
+| --- | --- | --- |
+| Exporting an implementation | A handwritten `@_cdecl("symbol")` function that returns `dyLibCreator(factory:forType:)` | `@DyLibExport(Interface.self)` generates the entry point |
+| Entry symbol | A string typed separately on each side, so a typo fails only at runtime | Derived from the protocol name and version on both sides |
+| Loading | An explicit `dyLibLoad(withSymbol:fromFramework:forType:)` call before first use | `@DyLibConnect` gives a lazy `instance` that loads on its first call |
+| Crossing the boundary | The host casts the raw pointer to the type it asked for, unchecked | A C-layout header checked for magic, ABI version, and spec identity before any cast |
+| Wrong type or duplicated interface module | Undefined behavior | `specTypeMismatch` |
+| Interface changes | No versioning | `version:` on both sides, so a stale plugin fails with `symbolNotFound` |
+| Dependencies between images | Opened by hand, in the right order | Typed `dependencies:`, opened in topological order with cycle detection |
+| Open flags | `RTLD_LAZY` | `RTLD_NOW \| RTLD_LOCAL \| RTLD_FIRST` by default |
+| Image lifetime | `dlclose` right after creating the instance, even though its code still lives in the image | Kept loaded in one process-wide registry, keyed by canonical path and reference-counted; closed only through an explicit `close` |
+| Errors | `DynamicFrameworkLoaderError`: `symbolNotFound`, `failedToOpenFile`, `unknown` | `DyLibError`, with a case for each failure (see [Errors](#errors)) |
+| Observability | None | Optional per-connection `DyLibLoadLogger` |
+
+The v1 API still compiles as deprecated adapters routed through the Dynasty loader, so you can migrate one call site at a time:
+
+| Deprecated v1 API | Dynasty replacement |
 | --- | --- |
 | Handwritten `@_cdecl("symbol")` plus `dyLibCreator(factory:forType:)` | `@DyLibExport(Interface.self)` on the implementation |
 | `dyLibLoad(withSymbol:fromPath:forType:)` | `InterfacePluginSpec.load(from: path)` |
