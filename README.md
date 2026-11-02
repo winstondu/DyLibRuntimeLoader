@@ -204,6 +204,31 @@ let dog = try AnimalPluginSpec.load(from: DyLibLibrary(
 
 **Open flags.** `DyLibLibrary` defaults to `[.now, .local, .first]`. `RTLD_FIRST` confines symbol lookup to the requested image rather than its dependencies. The registry is keyed by canonical path, so the first open's flags win while the image stays resident.
 
+### Logging lazy loads
+
+To see when a plugin actually loads and how long the first call waited, give the connection a `DyLibLoadLogger` type. It is a type, not an instance, so it is a plain compile-time argument like the interface:
+
+```swift
+enum PluginLog: DyLibLoadLogger {
+    static let log = Logger(subsystem: "com.example.app", category: "plugins")
+
+    static func didLoad(_ event: DyLibLoadResult) {
+        let outcome = event.error.map { "failed: \($0)" } ?? "ok"
+        log.info("Loaded \(event.interface) from \(event.path) in \(event.duration): \(outcome)")
+    }
+}
+
+@DyLibConnect(Animal.self, framework: "AnimalImplementation", logger: PluginLog.self)
+enum DogPlugin {}
+```
+
+- One event per **real load**. Cache hits are silent, and because failures are not cached, each retry produces its own event.
+- `didLoad` fires on success and on failure, so a load that is about to trap a non-throwing proxy requirement is logged first. `willLoad` is optional and defaults to a no-op.
+- `duration` is measured with `ContinuousClock` from the first call to a usable instance, covering `dlopen` of the image and its dependencies, the symbol lookup, header validation, and the factory call.
+- Leave `logger:` out and nothing is logged; the connection expands exactly as before and reads no clock. There is no global logger, so two connections can log differently.
+- Callbacks run outside `DyLibLoader`'s lock but inside the connection's own, so a logger must not call into the connection it is logging.
+- `DyLibLoadLogger` uses `Duration`, so it requires macOS 13 / iOS 16 or newer at the connection's declaration site.
+
 ## Setting up an iOS app
 
 ### How the app packages interfaces vs. implementations

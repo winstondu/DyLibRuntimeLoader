@@ -14,5 +14,6 @@ public macro DyLibConnect(
     _ interface: Any.Type,
     framework: String,
     dependencies: [Any.Type] = [],
-    bundle: Bundle? = nil
+    bundle: Bundle? = nil,
+    logger: Any.Type? = nil
 ) = #externalMacro(module: "DyLibRuntimeLoaderMacros", type: "DyLibConnectMacro")

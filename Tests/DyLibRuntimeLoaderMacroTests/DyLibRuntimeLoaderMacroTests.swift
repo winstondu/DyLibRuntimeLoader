@@ -545,6 +545,62 @@ private func assertExpansion(
         )
     }
 
+    @Test func connectLoggerExpansion() {
+        assertExpansion(
+            """
+            @DyLibConnect(Animal.self, framework: "AnimalImplementation", logger: PluginLog.self)
+            enum DogPlugin {}
+            """,
+            expandedSource: """
+            enum DogPlugin {
+
+                public static var library: DyLibLibrary {
+                    .framework("AnimalImplementation", dependencies: [])
+                }
+
+                private static let _dylibLazy = DyLibLazyPlugin<AnimalPluginSpec>(logger: PluginLog.self, library: {
+                        library
+                    })
+
+                public static var instance: any Animal {
+                    AnimalLazyProxy {
+                        try _dylibLazy.loadIfNeeded()
+                    }
+                }
+
+                public static func loadIfNeeded() throws -> any Animal {
+                    try _dylibLazy.loadIfNeeded()
+                }
+
+                public static var isLoaded: Bool {
+                    _dylibLazy.isLoaded
+                }
+            }
+
+            extension DogPlugin: DyLibPluginConnection {
+                public typealias Interface = any Animal
+            }
+            """
+        )
+    }
+
+    @Test func connectInvalidLoggerDiagnostic() {
+        assertExpansion(
+            """
+            @DyLibConnect(Animal.self, framework: "AnimalImplementation", logger: PluginLog())
+            enum DogPlugin {}
+            """,
+            expandedSource: """
+            enum DogPlugin {}
+            """,
+            diagnostics: [DiagnosticSpec(
+                message: "logger must be a metatype expression of a DyLibLoadLogger type such as PluginLog.self",
+                line: 1,
+                column: 71
+            )]
+        )
+    }
+
     @Test func connectRequiresEnumDiagnostic() {
         assertExpansion(
             """
