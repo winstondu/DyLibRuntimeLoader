@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="1128" height="808" viewBox="0 0 1128 808" font-family="-apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif">
-  <title>Linked vs. loaded: how DyLibRuntimeLoader lays out an iOS app bundle</title>
+  <title>Linked vs. loaded: how Dynasty lays out an iOS app bundle</title>
   <defs>
     <marker id="arrDash" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/>
@@ -54,7 +54,7 @@
   <text x="178" y="133" class="muted" font-size="12">ViewController.swift</text>
   <text x="64" y="156" class="code">import AnimalInterface</text>
   <text x="64" y="174" class="code">import DemoLogging</text>
-  <text x="64" y="192" class="code">import DyLibRuntimeLoader</text>
+  <text x="64" y="192" class="code">import Dynasty</text>
   <text x="64" y="214" class="code">@DyLibConnect(Animal.self, framework: "CatImplementation", logger: DebugLogger.self)</text>
   <text x="64" y="232" class="code">enum CatPlugin {}     // likewise MousePlugin, DogPlugin; a tap calls .instance.speak()</text>
   <text x="700" y="156" class="t h" font-size="13">Imports interfaces and DemoLogging only.</text>
@@ -129,7 +129,7 @@
 
   <!-- Runtime: full-width base -->
   <rect x="60" y="660" width="1020" height="40" rx="8" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
-  <text x="178" y="685" class="t h" font-size="15">DyLibRuntimeLoader</text>
+  <text x="178" y="685" class="t h" font-size="15">Dynasty</text>
   <text x="338" y="685" class="muted" font-size="12">macros + dlopen loader, refcounted handles; the base every framework above links</text>
 
   <!-- dyld links -->

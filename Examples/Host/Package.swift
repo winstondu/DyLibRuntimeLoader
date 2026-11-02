@@ -12,7 +12,7 @@ let package = Package(
     targets: [
         .executableTarget(name: "Host", dependencies: [
             .product(name: "AnimalInterface", package: "AnimalInterface"),
-            .product(name: "DyLibRuntimeLoader", package: "DyLibRuntimeLoader"),
+            .product(name: "Dynasty", package: "DyLibRuntimeLoader"),
         ]),
     ],
     swiftLanguageModes: [.v5]

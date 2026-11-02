@@ -8,7 +8,7 @@ import SwiftSyntax
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import Testing
-@testable import DyLibRuntimeLoaderMacros
+@testable import DynastyMacros
 
 /// Expands only the member + extension roles of the first attribute on the first enum,
 /// returning the printed declarations and the diagnostics produced.

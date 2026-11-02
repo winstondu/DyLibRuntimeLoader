@@ -1,4 +1,4 @@
-import DyLibRuntimeLoader
+import Dynasty
 
 @DyLibInterface
 public protocol Trick {

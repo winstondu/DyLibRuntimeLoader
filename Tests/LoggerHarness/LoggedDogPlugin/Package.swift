@@ -14,7 +14,7 @@ let package = Package(
         .target(name: "LoggedDogPlugin", dependencies: [
             .product(name: "AnimalInterface", package: "AnimalInterface"),
             .product(name: "TrickInterface", package: "TrickInterface"),
-            .product(name: "DyLibRuntimeLoader", package: "DyLibRuntimeLoader"),
+            .product(name: "Dynasty", package: "DyLibRuntimeLoader"),
         ]),
     ],
     swiftLanguageModes: [.v5]

@@ -21,7 +21,7 @@ done
 
 rm -rf "$DIST"; mkdir -p "$DIST/Frameworks"
 cp "$(bin "$HERE/LoggerHost")/LoggerHost" "$DIST/"
-cp "$(bin "$HERE/LoggerHost")/libDyLibRuntimeLoader.dylib" "$DIST/"
+cp "$(bin "$HERE/LoggerHost")/libDynasty.dylib" "$DIST/"
 cp "$(bin "$EX/AnimalInterface")/libAnimalInterface.dylib" "$DIST/"
 cp "$(bin "$EX/TrickInterface")/libTrickInterface.dylib" "$DIST/"
 cp "$(bin "$EX/CatPlugin")/libCatPlugin.dylib" "$DIST/"

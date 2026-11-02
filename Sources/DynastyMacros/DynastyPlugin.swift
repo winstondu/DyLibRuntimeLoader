@@ -2,7 +2,7 @@ import SwiftCompilerPlugin
 import SwiftSyntaxMacros
 
 @main
-struct DyLibRuntimeLoaderPlugin: CompilerPlugin {
+struct DynastyPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
         DyLibInterfaceMacro.self,
         DyLibExportMacro.self,

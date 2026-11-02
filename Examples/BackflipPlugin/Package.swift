@@ -12,7 +12,7 @@ let package = Package(
     targets: [
         .target(name: "BackflipPlugin", dependencies: [
             .product(name: "TrickInterface", package: "TrickInterface"),
-            .product(name: "DyLibRuntimeLoader", package: "DyLibRuntimeLoader"),
+            .product(name: "Dynasty", package: "DyLibRuntimeLoader"),
         ]),
     ],
     swiftLanguageModes: [.v5]

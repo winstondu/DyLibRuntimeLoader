@@ -9,7 +9,7 @@ private struct MacroDiagnostic: DiagnosticMessage {
 
     init(_ id: String, _ message: String) {
         self.message = message
-        self.diagnosticID = MessageID(domain: "DyLibRuntimeLoaderMacros", id: id)
+        self.diagnosticID = MessageID(domain: "DynastyMacros", id: id)
     }
 }
 

@@ -12,7 +12,7 @@ let package = Package(
     targets: [
         .target(name: "CompileFail", dependencies: [
             .product(name: "AnimalInterface", package: "AnimalInterface"),
-            .product(name: "DyLibRuntimeLoader", package: "DyLibRuntimeLoader"),
+            .product(name: "Dynasty", package: "DyLibRuntimeLoader"),
         ]),
     ],
     swiftLanguageModes: [.v5]

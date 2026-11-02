@@ -10,7 +10,7 @@ import Darwin
 import Dispatch
 import Foundation
 import Testing
-@testable import DyLibRuntimeLoader
+@testable import Dynasty
 
 @DyLibInterface
 public protocol LoggerProbe {

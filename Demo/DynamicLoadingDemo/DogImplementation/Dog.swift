@@ -1,7 +1,7 @@
 import AnimalInterface
 import DemoLogging
 import TrickInterface
-import DyLibRuntimeLoader
+import Dynasty
 
 @DyLibConnect(Trick.self, framework: "TrickImplementation", logger: DebugLogger.self)
 enum TrickPlugin {}

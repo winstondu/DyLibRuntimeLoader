@@ -1,5 +1,5 @@
 import AnimalInterface
-import DyLibRuntimeLoader
+import Dynasty
 
 @DyLibExport(Animal.self)
 public struct Cat: Animal {

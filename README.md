@@ -1,4 +1,8 @@
-# DyLibRuntimeLoader
+# Dynasty
+
+**Runtime dylib loading for Swift.**
+
+> Dynasty is v2 of [DyLibRuntimeLoader](https://github.com/duyquang91/DyLibRuntimeLoader) by Steve Dao ([@duyquang91](https://github.com/duyquang91)), and is based on his original v1. See [Credits](#credits).
 
 Type-safe plugins for Swift on iOS and macOS: ship feature code as embedded dynamic frameworks that are **linked by nobody and loaded on first use**, with three Swift macros generating every symbol, entry point, and loader call so that the compiler, not a string, checks the wiring.
 
@@ -26,12 +30,13 @@ print(DogPlugin.instance.speak())   // AnimalImplementation.framework is dlopen'
 - [Setting up an iOS app](#setting-up-an-ios-app)
 - [App Store review](#app-store-review)
 - [Reference](#reference): errors, unloading, repository layout, development, migration from v1
+- [Credits](#credits)
 
 ## Why dynamic loading
 
 Apps can use another binary in three ways. **Static linking** copies the code into the executable. **Dynamic linking** records the framework as a load command, so dyld maps, rebases, and binds it *before `main()`* on every launch whether or not the session uses it. **Dynamic loading** asks for the image later with `dlopen`, only when a feature needs it.
 
-DyLibRuntimeLoader builds on the third. The app links only small **interface modules** (protocols) and the runtime. Concrete implementations live in frameworks that are *embedded* in the bundle but *not linked*, and they are opened the first time someone calls into them.
+Dynasty builds on the third. The app links only small **interface modules** (protocols) and the runtime. Concrete implementations live in frameworks that are *embedded* in the bundle but *not linked*, and they are opened the first time someone calls into them.
 
 ![Linked vs. loaded: interfaces are linked at launch, implementations are embedded but loaded on first use](docs/diagrams/architecture.svg)
 
@@ -48,7 +53,7 @@ Every plugin system built with this library has exactly three roles, each marked
 **1. Interface module** (a `.dynamic` library shared by host and plugins):
 
 ```swift
-import DyLibRuntimeLoader
+import Dynasty
 
 @DyLibInterface
 public protocol Animal {
@@ -60,7 +65,7 @@ public protocol Animal {
 
 ```swift
 import AnimalInterface
-import DyLibRuntimeLoader
+import Dynasty
 
 @DyLibExport(Animal.self)
 public struct Dog: Animal {
@@ -73,7 +78,7 @@ public struct Dog: Animal {
 
 ```swift
 import AnimalInterface
-import DyLibRuntimeLoader
+import Dynasty
 
 @DyLibConnect(Animal.self, framework: "AnimalImplementation")
 enum DogPlugin {}
@@ -132,7 +137,7 @@ Every entry point returns a pointer to a fixed, C-layout header. The host reads 
 
 ## The golden rule: one copy of every shared module
 
-Every interface module and `DyLibRuntimeLoader` itself **must be a `.dynamic` library product, embedded once and shared by the host and every plugin. Never link them statically.**
+Every interface module and `Dynasty` itself **must be a `.dynamic` library product, embedded once and shared by the host and every plugin. Never link them statically.**
 
 ![One shared interface copy passes the identity check; a statically duplicated copy produces specTypeMismatch](docs/diagrams/golden-rule.svg)
 
@@ -150,11 +155,11 @@ Meta's [The evolution of Facebook's iOS app architecture](https://engineering.fb
 - **2017–2018.** Using Buck's dependency graph, they generated a function-and-class-to-dylib map at build time, and on top of it a **plugin** system validated by the build, which hid dylibs from most engineers.
 - **Costs they report.** Plugin errors that are hard to search for, a departure from idiomatic iOS development, and an extra layer of indirection in a generated registry that is hard to find.
 
-DyLibRuntimeLoader keeps the idea and replaces the infrastructure with language features every Swift developer already has:
+Dynasty keeps the idea and replaces the infrastructure with language features every Swift developer already has:
 
-![Mapping Meta's FBiOS approach to DyLibRuntimeLoader v2](docs/diagrams/meta-comparison.svg)
+![Mapping Meta's FBiOS approach to Dynasty v2](docs/diagrams/meta-comparison.svg)
 
-| FBiOS | DyLibRuntimeLoader v2 |
+| FBiOS | Dynasty v2 |
 | --- | --- |
 | Product code in lazily loaded dylibs, off the pre-main path | Plugins are embedded, unlinked frameworks, opened with `dlopen` on first use |
 | String lookups (`NSClassFromString`) fail across unloaded dylibs | No string lookup: macro-derived C entry symbols and typed `PluginSpec`s |
@@ -236,7 +241,7 @@ Both kinds of framework end up in the same place, `YourApp.app/Frameworks/`, sig
 
 | | Interface modules and the runtime | Implementations (plugins) |
 | --- | --- | --- |
-| Examples in the demo | `DyLibRuntimeLoader`, `AnimalInterface`, `TrickInterface`, `DemoLogging` | `CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation` |
+| Examples in the demo | `Dynasty`, `AnimalInterface`, `TrickInterface`, `DemoLogging` | `CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation` |
 | How it enters the project | Swift package with a `.dynamic` library product, or a framework target in the app project (`DemoLogging`) | Framework target in the app project (or a prebuilt `.xcframework`) |
 | Link Binary With Libraries | **Yes** | **No** |
 | Embed Frameworks (Code Sign On Copy) | Yes | Yes |
@@ -261,7 +266,7 @@ The [demo](Demo/DynamicLoadingDemo) shows the full setup:
 3. In the app target's **Embed Frameworks** build phase, add the implementation frameworks, but do **not** add them to *Link Binary With Libraries* and do not `import` them. This puts them in `YourApp.app/Frameworks/` with no load command in the app binary.
 4. Declare `@DyLibConnect(Animal.self, framework: "CatImplementation", logger: DebugLogger.self)` (and likewise for `Mouse` and `Dog`) and call through `instance`. `DyLibLibrary.framework(_:)` resolves `Frameworks/<Name>.framework/<Name>`, including the macOS `Contents/Frameworks` layout.
 
-The app's `Frameworks/` folder then contains `DyLibRuntimeLoader`, `AnimalInterface`, `TrickInterface`, and `DemoLogging` (linked), plus `CatImplementation`, `MouseImplementation`, `DogImplementation`, and `TrickImplementation` (not linked; `otool -L` on the app binary never lists them). Nothing loads at launch. Tapping **Run Cat**, **Run Mouse**, or **Run Dog** performs that animal's first `dlopen`, and in Debug builds `DebugLogger` prints a line such as `[DyLib] Animal from CatImplementation in 12.06 ms (ok)`, followed by one for `Trick` when `Cat` or `Dog` speaks. A second tap is a cache hit and prints nothing.
+The app's `Frameworks/` folder then contains `Dynasty`, `AnimalInterface`, `TrickInterface`, and `DemoLogging` (linked), plus `CatImplementation`, `MouseImplementation`, `DogImplementation`, and `TrickImplementation` (not linked; `otool -L` on the app binary never lists them). Nothing loads at launch. Tapping **Run Cat**, **Run Mouse**, or **Run Dog** performs that animal's first `dlopen`, and in Debug builds `DebugLogger` prints a line such as `[DyLib] Animal from CatImplementation in 12.06 ms (ok)`, followed by one for `Trick` when `Cat` or `Dog` speaks. A second tap is a cache hit and prints nothing.
 
 To see the difference, delete `CatImplementation.framework` from a simulator build's `Frameworks/` folder and relaunch. The app starts normally and fails only when **Run Cat** is tapped. Delete `AnimalInterface.framework` and the app cannot launch at all.
 
@@ -309,8 +314,8 @@ All loader failures are `DyLibError`:
 ```text
 .
 ├── Sources/
-│   ├── DyLibRuntimeLoader/         Runtime, public macros, loader, deprecated v1 adapters
-│   └── DyLibRuntimeLoaderMacros/   SwiftSyntax implementations of the three macros
+│   ├── Dynasty/                    Runtime, public macros, loader, deprecated v1 adapters
+│   └── DynastyMacros/              SwiftSyntax implementations of the three macros
 ├── Tests/                          Runtime and macro tests (enabled with DYLIB_DEV=1)
 ├── Examples/                       SwiftPM end-to-end example: two interfaces, three plugins, one host
 │   └── run.sh                      Builds, assembles, runs, and verifies the output
@@ -355,8 +360,10 @@ DYLIB_DEV=1 swift test
 | `FrameworkName` and `Directory` | `DyLibLibrary.framework(_:)` or `DyLibLibrary(path:dependencies:)` |
 | `DynamicFrameworkLoaderError` | `DyLibError` |
 
+## Credits
+
+Dynasty is based on [DyLibRuntimeLoader](https://github.com/duyquang91/DyLibRuntimeLoader) v1, created by Steve Dao ([@duyquang91](https://github.com/duyquang91)). v1 established the approach this library builds on: shipping implementations as embedded frameworks, opening them with `dlopen`, and resolving a `@_cdecl` factory with `dlsym`. Its API is still available as deprecated adapters (see [Migration from v1](#migration-from-v1)).
+
 ## License
 
-DyLibRuntimeLoader is available under the MIT License. See [LICENSE](LICENSE).
-
-Originally created by [duyquang91](https://github.com/duyquang91) (Steve Dao).
+Dynasty is available under the MIT License. See [LICENSE](LICENSE).

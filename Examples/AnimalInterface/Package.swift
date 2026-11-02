@@ -9,7 +9,7 @@ let package = Package(
     targets: [
         .target(
             name: "AnimalInterface",
-            dependencies: [.product(name: "DyLibRuntimeLoader", package: "DyLibRuntimeLoader")]
+            dependencies: [.product(name: "Dynasty", package: "DyLibRuntimeLoader")]
         ),
     ],
     swiftLanguageModes: [.v5]

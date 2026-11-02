@@ -2,7 +2,7 @@ import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosGenericTestSupport
 import Testing
-@testable import DyLibRuntimeLoaderMacros
+@testable import DynastyMacros
 
 private let testMacros: [String: MacroSpec] = [
     "DyLibInterface": MacroSpec(type: DyLibInterfaceMacro.self),
@@ -30,7 +30,7 @@ private func assertExpansion(
     )
 }
 
-@Suite struct DyLibRuntimeLoaderMacroTests {
+@Suite struct DynastyMacroTests {
     @Test func interfaceExpansion() {
         assertExpansion(
             """

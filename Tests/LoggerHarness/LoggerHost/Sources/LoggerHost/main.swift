@@ -8,7 +8,7 @@
 
 import AnimalInterface
 import Darwin
-import DyLibRuntimeLoader
+import Dynasty
 import Foundation
 
 func emit(_ s: String) {

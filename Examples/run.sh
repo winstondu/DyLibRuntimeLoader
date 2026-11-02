@@ -19,7 +19,7 @@ bin_path() {
 }
 
 cp "$(bin_path Host)/Host" "$DIST/Host"
-cp "$(bin_path Host)/libDyLibRuntimeLoader.dylib" "$DIST/libDyLibRuntimeLoader.dylib"
+cp "$(bin_path Host)/libDynasty.dylib" "$DIST/libDynasty.dylib"
 cp "$(bin_path AnimalInterface)/libAnimalInterface.dylib" "$DIST/libAnimalInterface.dylib"
 cp "$(bin_path TrickInterface)/libTrickInterface.dylib" "$DIST/libTrickInterface.dylib"
 cp "$(bin_path CatPlugin)/libCatPlugin.dylib" "$DIST/libCatPlugin.dylib"

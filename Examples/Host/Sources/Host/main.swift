@@ -1,5 +1,5 @@
 import AnimalInterface
-import DyLibRuntimeLoader
+import Dynasty
 import Foundation
 
 let directory = URL(fileURLWithPath: CommandLine.arguments[1])

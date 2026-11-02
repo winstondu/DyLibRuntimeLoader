@@ -14,7 +14,7 @@ var dependencies: [Package.Dependency] = [
 
 var targets: [Target] = [
     .macro(
-        name: "DyLibRuntimeLoaderMacros",
+        name: "DynastyMacros",
         dependencies: [
             .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
             .product(name: "SwiftDiagnostics", package: "swift-syntax"),
@@ -25,8 +25,8 @@ var targets: [Target] = [
         swiftSettings: shippingSettings
     ),
     .target(
-        name: "DyLibRuntimeLoader",
-        dependencies: ["DyLibRuntimeLoaderMacros"],
+        name: "Dynasty",
+        dependencies: ["DynastyMacros"],
         swiftSettings: shippingSettings
     ),
 ]
@@ -58,9 +58,9 @@ if ProcessInfo.processInfo.environment["DYLIB_DEV"] == "1" {
     ))
     targets += [
         .testTarget(
-            name: "DyLibRuntimeLoaderMacroTests",
+            name: "DynastyMacroTests",
             dependencies: [
-                "DyLibRuntimeLoaderMacros",
+                "DynastyMacros",
                 .product(name: "SwiftSyntaxMacroExpansion", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxMacrosGenericTestSupport", package: "swift-syntax"),
                 .product(name: "Testing", package: "swift-testing"),
@@ -68,9 +68,9 @@ if ProcessInfo.processInfo.environment["DYLIB_DEV"] == "1" {
             swiftSettings: testSettings
         ),
         .testTarget(
-            name: "DyLibRuntimeLoaderTests",
+            name: "DynastyTests",
             dependencies: [
-                "DyLibRuntimeLoader",
+                "Dynasty",
                 .product(name: "Testing", package: "swift-testing"),
             ],
             swiftSettings: testSettings,
@@ -80,16 +80,16 @@ if ProcessInfo.processInfo.environment["DYLIB_DEV"] == "1" {
 }
 
 let package = Package(
-    name: "DyLibRuntimeLoader",
+    name: "Dynasty",
     platforms: [
         .macOS(.v10_15),
         .iOS(.v13),
     ],
     products: [
         .library(
-            name: "DyLibRuntimeLoader",
+            name: "Dynasty",
             type: .dynamic,
-            targets: ["DyLibRuntimeLoader"]
+            targets: ["Dynasty"]
         ),
     ],
     dependencies: dependencies,

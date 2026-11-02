@@ -2,7 +2,7 @@ import Darwin
 import Dispatch
 import Foundation
 import Testing
-@testable import DyLibRuntimeLoader
+@testable import Dynasty
 
 private enum MissingEntrySpec: DyLibPluginSpec {
     typealias Interface = Any
@@ -107,7 +107,7 @@ private enum ResultOnlyLogger: DyLibLoadLogger {
     static func didLoad(_ event: DyLibLoadResult) { recorder.record(event) }
 }
 
-@Suite struct DyLibRuntimeLoaderTests {
+@Suite struct DynastyTests {
     @Test func generatedLazyProxyDefersAndCachesResolution() throws {
         let counter = LockedCounter()
         let expected = TestWidget(value: "ready")
@@ -189,7 +189,7 @@ private enum ResultOnlyLogger: DyLibLoadLogger {
     }
 
     @Test func wrongPathThrowsFailedToOpen() {
-        let path = "/definitely/not/a/real/DyLibRuntimeLoader-test.dylib"
+        let path = "/definitely/not/a/real/Dynasty-test.dylib"
         do {
             _ = try DyLibLoader().open(DyLibLibrary(path: path))
             Issue.record("Expected dlopen to fail")
