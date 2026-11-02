@@ -1,4 +1,4 @@
-import DyLibRuntimeLoader
+import Dynasty
 import Foundation
 
 /// Prints one line per real lazy load in Debug builds and nothing in Release.

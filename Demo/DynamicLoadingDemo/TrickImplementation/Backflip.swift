@@ -1,5 +1,5 @@
 import TrickInterface
-import DyLibRuntimeLoader
+import Dynasty
 
 @DyLibExport(Trick.self)
 public struct Backflip: Trick {

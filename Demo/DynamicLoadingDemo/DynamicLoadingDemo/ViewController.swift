@@ -8,7 +8,7 @@
 import UIKit
 import AnimalInterface
 import DemoLogging
-import DyLibRuntimeLoader
+import Dynasty
 
 @DyLibConnect(Animal.self, framework: "CatImplementation", logger: DebugLogger.self)
 enum CatPlugin {}

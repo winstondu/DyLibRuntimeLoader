@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # End-to-end adversarial harness for the lazy-load logger.
-# Must run from a checkout whose directory is named DyLibRuntimeLoader (SwiftPM
+# Must run from a checkout whose directory is named Dynasty (SwiftPM
 # derives the root package identity from it).
 set -uo pipefail
 
@@ -21,7 +21,7 @@ done
 
 rm -rf "$DIST"; mkdir -p "$DIST/Frameworks"
 cp "$(bin "$HERE/LoggerHost")/LoggerHost" "$DIST/"
-cp "$(bin "$HERE/LoggerHost")/libDyLibRuntimeLoader.dylib" "$DIST/"
+cp "$(bin "$HERE/LoggerHost")/libDynasty.dylib" "$DIST/"
 cp "$(bin "$EX/AnimalInterface")/libAnimalInterface.dylib" "$DIST/"
 cp "$(bin "$EX/TrickInterface")/libTrickInterface.dylib" "$DIST/"
 cp "$(bin "$EX/CatPlugin")/libCatPlugin.dylib" "$DIST/"

@@ -1,4 +1,4 @@
-import DyLibRuntimeLoader
+import Dynasty
 import TrickInterface
 
 @DyLibExport(Trick.self)

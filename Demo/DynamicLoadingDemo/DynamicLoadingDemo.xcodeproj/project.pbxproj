@@ -14,35 +14,35 @@
 		5A6DB0352A9F1E2100E87643 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A6DB0342A9F1E2100E87643 /* Assets.xcassets */; };
 		5A6DB0382A9F1E2100E87643 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A6DB0362A9F1E2100E87643 /* LaunchScreen.storyboard */; };
 		5A6DB0442A9F1E5500E87643 /* AnimalInterface in Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0432A9F1E5500E87643 /* AnimalInterface */; };
-		5A6DB0462A9F1E5B00E87643 /* DyLibRuntimeLoader in Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0452A9F1E5B00E87643 /* DyLibRuntimeLoader */; };
-		5A6DB0472A9F1E5B00E87643 /* DyLibRuntimeLoader in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0452A9F1E5B00E87643 /* DyLibRuntimeLoader */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		5A6DB0462A9F1E5B00E87643 /* Dynasty in Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0452A9F1E5B00E87643 /* Dynasty */; };
+		5A6DB0472A9F1E5B00E87643 /* Dynasty in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0452A9F1E5B00E87643 /* Dynasty */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5AC3E0112A9F216B00BBD9F9 /* AnimalInterface in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 5A6DB0432A9F1E5500E87643 /* AnimalInterface */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		AA0000000000000000000003 /* Dog.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000001 /* Dog.swift */; };
 		AA0000000000000000000004 /* AnimalInterface in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000007 /* AnimalInterface */; };
-		AA0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000008 /* DyLibRuntimeLoader */; };
+		AA0000000000000000000005 /* Dynasty in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000008 /* Dynasty */; };
 		AA0000000000000000000006 /* DogImplementation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000002 /* DogImplementation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BB0000000000000000000003 /* Backflip.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000001 /* Backflip.swift */; };
 		BB0000000000000000000004 /* TrickInterface in Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000007 /* TrickInterface */; };
-		BB0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000008 /* DyLibRuntimeLoader */; };
+		BB0000000000000000000005 /* Dynasty in Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000008 /* Dynasty */; };
 		BB0000000000000000000006 /* TrickImplementation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BB0000000000000000000002 /* TrickImplementation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BB0000000000000000000012 /* TrickInterface in Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000013 /* TrickInterface */; };
 		BB0000000000000000000014 /* TrickInterface in Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000015 /* TrickInterface */; };
 		BB0000000000000000000016 /* TrickInterface in Embed Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000015 /* TrickInterface */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		DD0000000000000000000003 /* Cat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000000000000000000001 /* Cat.swift */; };
 		DD0000000000000000000004 /* AnimalInterface in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000000000000000000007 /* AnimalInterface */; };
-		DD0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000000000000000000008 /* DyLibRuntimeLoader */; };
+		DD0000000000000000000005 /* Dynasty in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000000000000000000008 /* Dynasty */; };
 		DD0000000000000000000006 /* CatImplementation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD0000000000000000000002 /* CatImplementation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DD0000000000000000000012 /* TrickInterface in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000000000000000000013 /* TrickInterface */; };
 		EE0000000000000000000003 /* Mouse.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0000000000000000000001 /* Mouse.swift */; };
 		EE0000000000000000000004 /* AnimalInterface in Frameworks */ = {isa = PBXBuildFile; productRef = EE0000000000000000000007 /* AnimalInterface */; };
-		EE0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */ = {isa = PBXBuildFile; productRef = EE0000000000000000000008 /* DyLibRuntimeLoader */; };
+		EE0000000000000000000005 /* Dynasty in Frameworks */ = {isa = PBXBuildFile; productRef = EE0000000000000000000008 /* Dynasty */; };
 		EE0000000000000000000006 /* MouseImplementation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EE0000000000000000000002 /* MouseImplementation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF0000000000000000000002 /* DemoLogging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000011 /* DemoLogging.framework */; };
 		FF0000000000000000000003 /* DemoLogging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000011 /* DemoLogging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF0000000000000000000005 /* DemoLogging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000011 /* DemoLogging.framework */; };
 		FF0000000000000000000007 /* DemoLogging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000011 /* DemoLogging.framework */; };
 		FF0000000000000000000012 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000010 /* DebugLogger.swift */; };
-		FF0000000000000000000019 /* DyLibRuntimeLoader in Frameworks */ = {isa = PBXBuildFile; productRef = FF0000000000000000000008 /* DyLibRuntimeLoader */; };
+		FF0000000000000000000019 /* Dynasty in Frameworks */ = {isa = PBXBuildFile; productRef = FF0000000000000000000008 /* Dynasty */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,7 +105,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				5AC3E0112A9F216B00BBD9F9 /* AnimalInterface in Embed Frameworks */,
-				5A6DB0472A9F1E5B00E87643 /* DyLibRuntimeLoader in Embed Frameworks */,
+				5A6DB0472A9F1E5B00E87643 /* Dynasty in Embed Frameworks */,
 				FF0000000000000000000003 /* DemoLogging.framework in Embed Frameworks */,
 				DD0000000000000000000006 /* CatImplementation.framework in Embed Frameworks */,
 				EE0000000000000000000006 /* MouseImplementation.framework in Embed Frameworks */,
@@ -145,7 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A6DB0442A9F1E5500E87643 /* AnimalInterface in Frameworks */,
-				5A6DB0462A9F1E5B00E87643 /* DyLibRuntimeLoader in Frameworks */,
+				5A6DB0462A9F1E5B00E87643 /* Dynasty in Frameworks */,
 				BB0000000000000000000014 /* TrickInterface in Frameworks */,
 				FF0000000000000000000002 /* DemoLogging.framework in Frameworks */,
 			);
@@ -156,7 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA0000000000000000000004 /* AnimalInterface in Frameworks */,
-				AA0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */,
+				AA0000000000000000000005 /* Dynasty in Frameworks */,
 				BB0000000000000000000012 /* TrickInterface in Frameworks */,
 				FF0000000000000000000005 /* DemoLogging.framework in Frameworks */,
 			);
@@ -167,7 +167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB0000000000000000000004 /* TrickInterface in Frameworks */,
-				BB0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */,
+				BB0000000000000000000005 /* Dynasty in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,7 +176,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD0000000000000000000004 /* AnimalInterface in Frameworks */,
-				DD0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */,
+				DD0000000000000000000005 /* Dynasty in Frameworks */,
 				DD0000000000000000000012 /* TrickInterface in Frameworks */,
 				FF0000000000000000000007 /* DemoLogging.framework in Frameworks */,
 			);
@@ -187,7 +187,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE0000000000000000000004 /* AnimalInterface in Frameworks */,
-				EE0000000000000000000005 /* DyLibRuntimeLoader in Frameworks */,
+				EE0000000000000000000005 /* Dynasty in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,7 +195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF0000000000000000000019 /* DyLibRuntimeLoader in Frameworks */,
+				FF0000000000000000000019 /* Dynasty in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,7 +314,7 @@
 			name = DynamicLoadingDemo;
 			packageProductDependencies = (
 				5A6DB0432A9F1E5500E87643 /* AnimalInterface */,
-				5A6DB0452A9F1E5B00E87643 /* DyLibRuntimeLoader */,
+				5A6DB0452A9F1E5B00E87643 /* Dynasty */,
 				BB0000000000000000000015 /* TrickInterface */,
 			);
 			productName = DynamicLoadingDemo;
@@ -336,7 +336,7 @@
 			name = DogImplementation;
 			packageProductDependencies = (
 				AA0000000000000000000007 /* AnimalInterface */,
-				AA0000000000000000000008 /* DyLibRuntimeLoader */,
+				AA0000000000000000000008 /* Dynasty */,
 				BB0000000000000000000013 /* TrickInterface */,
 			);
 			productName = DogImplementation;
@@ -357,7 +357,7 @@
 			name = TrickImplementation;
 			packageProductDependencies = (
 				BB0000000000000000000007 /* TrickInterface */,
-				BB0000000000000000000008 /* DyLibRuntimeLoader */,
+				BB0000000000000000000008 /* Dynasty */,
 			);
 			productName = TrickImplementation;
 			productReference = BB0000000000000000000002 /* TrickImplementation.framework */;
@@ -378,7 +378,7 @@
 			name = CatImplementation;
 			packageProductDependencies = (
 				DD0000000000000000000007 /* AnimalInterface */,
-				DD0000000000000000000008 /* DyLibRuntimeLoader */,
+				DD0000000000000000000008 /* Dynasty */,
 				DD0000000000000000000013 /* TrickInterface */,
 			);
 			productName = CatImplementation;
@@ -399,7 +399,7 @@
 			name = MouseImplementation;
 			packageProductDependencies = (
 				EE0000000000000000000007 /* AnimalInterface */,
-				EE0000000000000000000008 /* DyLibRuntimeLoader */,
+				EE0000000000000000000008 /* Dynasty */,
 			);
 			productName = MouseImplementation;
 			productReference = EE0000000000000000000002 /* MouseImplementation.framework */;
@@ -418,7 +418,7 @@
 			);
 			name = DemoLogging;
 			packageProductDependencies = (
-				FF0000000000000000000008 /* DyLibRuntimeLoader */,
+				FF0000000000000000000008 /* Dynasty */,
 			);
 			productName = DemoLogging;
 			productReference = FF0000000000000000000011 /* DemoLogging.framework */;
@@ -1157,30 +1157,30 @@
 			package = CC0000000000000000000001 /* XCLocalSwiftPackageReference "../Animals/AnimalInterface" */;
 			productName = AnimalInterface;
 		};
-		5A6DB0452A9F1E5B00E87643 /* DyLibRuntimeLoader */ = {
+		5A6DB0452A9F1E5B00E87643 /* Dynasty */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CC0000000000000000000003 /* XCLocalSwiftPackageReference "../.." */;
-			productName = DyLibRuntimeLoader;
+			productName = Dynasty;
 		};
 		AA0000000000000000000007 /* AnimalInterface */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CC0000000000000000000001 /* XCLocalSwiftPackageReference "../Animals/AnimalInterface" */;
 			productName = AnimalInterface;
 		};
-		AA0000000000000000000008 /* DyLibRuntimeLoader */ = {
+		AA0000000000000000000008 /* Dynasty */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CC0000000000000000000003 /* XCLocalSwiftPackageReference "../.." */;
-			productName = DyLibRuntimeLoader;
+			productName = Dynasty;
 		};
 		BB0000000000000000000007 /* TrickInterface */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CC0000000000000000000002 /* XCLocalSwiftPackageReference "../Animals/TrickInterface" */;
 			productName = TrickInterface;
 		};
-		BB0000000000000000000008 /* DyLibRuntimeLoader */ = {
+		BB0000000000000000000008 /* Dynasty */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CC0000000000000000000003 /* XCLocalSwiftPackageReference "../.." */;
-			productName = DyLibRuntimeLoader;
+			productName = Dynasty;
 		};
 		BB0000000000000000000013 /* TrickInterface */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1197,10 +1197,10 @@
 			package = CC0000000000000000000001 /* XCLocalSwiftPackageReference "../Animals/AnimalInterface" */;
 			productName = AnimalInterface;
 		};
-		DD0000000000000000000008 /* DyLibRuntimeLoader */ = {
+		DD0000000000000000000008 /* Dynasty */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CC0000000000000000000003 /* XCLocalSwiftPackageReference "../.." */;
-			productName = DyLibRuntimeLoader;
+			productName = Dynasty;
 		};
 		DD0000000000000000000013 /* TrickInterface */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1212,15 +1212,15 @@
 			package = CC0000000000000000000001 /* XCLocalSwiftPackageReference "../Animals/AnimalInterface" */;
 			productName = AnimalInterface;
 		};
-		EE0000000000000000000008 /* DyLibRuntimeLoader */ = {
+		EE0000000000000000000008 /* Dynasty */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CC0000000000000000000003 /* XCLocalSwiftPackageReference "../.." */;
-			productName = DyLibRuntimeLoader;
+			productName = Dynasty;
 		};
-		FF0000000000000000000008 /* DyLibRuntimeLoader */ = {
+		FF0000000000000000000008 /* Dynasty */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CC0000000000000000000003 /* XCLocalSwiftPackageReference "../.." */;
-			productName = DyLibRuntimeLoader;
+			productName = Dynasty;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
