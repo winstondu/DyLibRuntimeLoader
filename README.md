@@ -326,8 +326,8 @@ All loader failures are `DyLibError`:
 ### Run the example
 
 ```sh
-git clone https://github.com/winstondu/DyLibRuntimeLoader.git
-cd DyLibRuntimeLoader
+git clone https://github.com/winstondu/Dynasty.git
+cd Dynasty
 Examples/run.sh
 ```
 

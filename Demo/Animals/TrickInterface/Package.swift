@@ -18,7 +18,7 @@ let package = Package(
         .target(
             name: "TrickInterface",
             dependencies: [
-                .product(name: "Dynasty", package: "DyLibRuntimeLoader"),
+                .product(name: "Dynasty", package: "Dynasty"),
             ]),
     ],
     swiftLanguageModes: [.v5]

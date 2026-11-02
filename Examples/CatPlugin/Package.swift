@@ -12,7 +12,7 @@ let package = Package(
     targets: [
         .target(name: "CatPlugin", dependencies: [
             .product(name: "AnimalInterface", package: "AnimalInterface"),
-            .product(name: "Dynasty", package: "DyLibRuntimeLoader"),
+            .product(name: "Dynasty", package: "Dynasty"),
         ]),
     ],
     swiftLanguageModes: [.v5]

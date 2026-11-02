@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # End-to-end adversarial harness for the lazy-load logger.
-# Must run from a checkout whose directory is named DyLibRuntimeLoader (SwiftPM
+# Must run from a checkout whose directory is named Dynasty (SwiftPM
 # derives the root package identity from it).
 set -uo pipefail
 
