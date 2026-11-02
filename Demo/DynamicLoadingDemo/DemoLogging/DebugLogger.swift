@@ -4,7 +4,8 @@ import Foundation
 /// Prints one line per real lazy load in Debug builds and nothing in Release.
 ///
 /// Shared by the app and every plugin that declares a connection, so it ships
-/// as one `.dynamic` module like the interfaces (the golden rule).
+/// as one framework that the app links and embeds, like the interfaces (the
+/// golden rule).
 public enum DebugLogger: DyLibLoadLogger {
     public static func didLoad(_ event: DyLibLoadResult) {
         #if DEBUG

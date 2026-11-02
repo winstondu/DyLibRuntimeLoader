@@ -237,7 +237,7 @@ Both kinds of framework end up in the same place, `YourApp.app/Frameworks/`, sig
 | | Interface modules and the runtime | Implementations (plugins) |
 | --- | --- | --- |
 | Examples in the demo | `DyLibRuntimeLoader`, `AnimalInterface`, `TrickInterface`, `DemoLogging` | `CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation` |
-| How it enters the project | Swift package with a `.dynamic` library product | Framework target in the app project (or a prebuilt `.xcframework`) |
+| How it enters the project | Swift package with a `.dynamic` library product, or a framework target in the app project (`DemoLogging`) | Framework target in the app project (or a prebuilt `.xcframework`) |
 | Link Binary With Libraries | **Yes** | **No** |
 | Embed Frameworks (Code Sign On Copy) | Yes | Yes |
 | `import`ed by app code | Yes, the app calls the protocols | **Never**, the app names it only as a string in `@DyLibConnect(framework:)` |
@@ -249,15 +249,15 @@ Both kinds of framework end up in the same place, `YourApp.app/Frameworks/`, sig
 A few details make this work:
 
 - **Build order without linking.** The app target lists each implementation as a *target dependency* so Xcode builds it before the Embed Frameworks phase copies it, but the link phase never mentions it.
-- **Plugins link interfaces, never each other.** Each implementation links the interfaces it uses and the runtime, which is how it resolves `Animal`, `Trick`, and `DebugLogger` to the app's single copies through `@rpath` (`@executable_path/Frameworks`). Linking against a `.dynamic` product records a load command but copies nothing, so the plugin doesn't carry its own interface copy. A plugin reaches another plugin only through a connection (`Dog` → `TrickImplementation`), never by linking it.
+- **Plugins link interfaces, never each other.** Each implementation links the interfaces it uses and the runtime, which is how it resolves `Animal`, `Trick`, and `DebugLogger` to the app's single copies through `@rpath` (`@executable_path/Frameworks`). Linking against a `.dynamic` product or a framework target records a load command but copies nothing, so the plugin doesn't carry its own interface copy. A plugin reaches another plugin only through a connection (`Dog` → `TrickImplementation`), never by linking it.
 - **Only the app embeds.** Plugins don't embed their dependencies. The app embeds every framework exactly once, which is [the golden rule](#the-golden-rule-one-copy-of-every-shared-module) applied to packaging.
 
 ### Steps
 
 The [demo](Demo/DynamicLoadingDemo) shows the full setup:
 
-1. Add the runtime and each interface module as Swift packages (`AnimalInterface`, `TrickInterface`, and `DemoLogging`, which holds the shared `DebugLogger`). They are `.dynamic` products, so they are **linked and embedded**.
-2. Add each implementation as a **framework target** (`CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation`) that depends on its interface. `Cat` and `Dog` also depend on `TrickInterface` and `DemoLogging` because they declare their own `Trick` connection.
+1. Add the runtime and each interface module as Swift packages (`AnimalInterface`, `TrickInterface`). They are `.dynamic` products, so they are **linked and embedded**. The shared `DebugLogger` lives in `DemoLogging`, a **framework target** in the app project that is also **linked and embedded** by the app. Being linked is what makes it an interface-side module, not how it is packaged.
+2. Add each implementation as a **framework target** (`CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation`) that depends on its interface. `Cat` and `Dog` also depend on `TrickInterface` and link `DemoLogging.framework` (without embedding it) because they declare their own `Trick` connection.
 3. In the app target's **Embed Frameworks** build phase, add the implementation frameworks, but do **not** add them to *Link Binary With Libraries* and do not `import` them. This puts them in `YourApp.app/Frameworks/` with no load command in the app binary.
 4. Declare `@DyLibConnect(Animal.self, framework: "CatImplementation", logger: DebugLogger.self)` (and likewise for `Mouse` and `Dog`) and call through `instance`. `DyLibLibrary.framework(_:)` resolves `Frameworks/<Name>.framework/<Name>`, including the macOS `Contents/Frameworks` layout.
 
