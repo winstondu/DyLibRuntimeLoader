@@ -1,11 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="900" height="962" viewBox="0 0 900 962" font-family="-apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif">
   <title>Linked vs. loaded: how DyLibRuntimeLoader lays out an iOS app bundle</title>
   <defs>
-    <marker id="arrSolid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#047857"/>
-    </marker>
     <marker id="arrDash" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/>
+    </marker>
+    <marker id="arr-rt" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr-an" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0072b2"/>
+    </marker>
+    <marker id="arr-dl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#cc79a7"/>
+    </marker>
+    <marker id="arr-tr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#009e73"/>
+    </marker>
+    <marker id="arr-app" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
     </marker>
   </defs>
   <style>
@@ -26,8 +38,11 @@
   <text x="36" y="99" class="t h" font-size="14">DynamicLoadingDemo.app</text>
 
   <!-- Legend -->
-  <line x1="414" y1="95" x2="442" y2="95" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <text x="448" y="99" fill="#047857" font-size="11">dyld link: load command, @rpath to the app's copy</text>
+  <text x="300" y="99" class="muted" font-size="11">dyld link, colored by the framework it targets:</text>
+  <line x1="560" y1="95" x2="580" y2="95" stroke="#1e293b" stroke-width="1.5" marker-end="url(#arr-rt)"/>
+  <line x1="590" y1="95" x2="610" y2="95" stroke="#0072b2" stroke-width="1.5" marker-end="url(#arr-an)"/>
+  <line x1="620" y1="95" x2="640" y2="95" stroke="#cc79a7" stroke-width="2" marker-end="url(#arr-dl)"/>
+  <line x1="650" y1="95" x2="670" y2="95" stroke="#009e73" stroke-width="1.5" marker-end="url(#arr-tr)"/>
   <line x1="722" y1="95" x2="750" y2="95" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrDash)"/>
   <text x="756" y="99" fill="#c2410c" font-size="11">dlopen on first use</text>
 
@@ -45,28 +60,28 @@
   <text x="560" y="194" class="muted" font-size="12">it names each framework only as a string.</text>
 
   <!-- dyld link arrow: the app's own links -->
-  <line x1="100" y1="246" x2="100" y2="290" stroke="#047857" stroke-width="2" marker-end="url(#arrSolid)"/>
-  <text x="108" y="276" fill="#047857" font-size="12">linked by dyld</text>
+  <line x1="100" y1="246" x2="100" y2="290" stroke="#64748b" stroke-width="2" marker-end="url(#arr-app)"/>
+  <text x="108" y="276" fill="#475569" font-size="12">linked by dyld</text>
 
   <!-- Linked band -->
   <rect x="32" y="292" width="836" height="140" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
 
-  <rect x="40" y="324" width="186" height="76" rx="8" fill="#ffffff" stroke="#10b981"/>
+  <rect x="40" y="324" width="186" height="76" rx="8" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
   <text x="54" y="348" class="t h" font-size="15">DyLibRuntimeLoader</text>
   <text x="54" y="368" class="muted" font-size="12">macros + dlopen loader</text>
   <text x="54" y="386" class="muted" font-size="12">refcounted handles</text>
 
-  <rect x="242" y="324" width="186" height="76" rx="8" fill="#ffffff" stroke="#10b981"/>
+  <rect x="242" y="324" width="186" height="76" rx="8" fill="#ffffff" stroke="#0072b2" stroke-width="2"/>
   <text x="256" y="348" class="t h" font-size="15">AnimalInterface</text>
   <text x="256" y="368" class="code">@DyLibInterface</text>
   <text x="256" y="386" class="code">public protocol Animal</text>
 
-  <rect x="444" y="324" width="186" height="76" rx="8" fill="#ffffff" stroke="#10b981"/>
+  <rect x="444" y="324" width="186" height="76" rx="8" fill="#ffffff" stroke="#cc79a7" stroke-width="2"/>
   <text x="458" y="348" class="t h" font-size="15">DemoLogging</text>
   <text x="458" y="368" class="code">enum DebugLogger:</text>
   <text x="458" y="386" class="code">  DyLibLoadLogger</text>
 
-  <rect x="646" y="324" width="186" height="76" rx="8" fill="#ffffff" stroke="#10b981"/>
+  <rect x="646" y="324" width="186" height="76" rx="8" fill="#ffffff" stroke="#009e73" stroke-width="2"/>
   <text x="660" y="348" class="t h" font-size="15">TrickInterface</text>
   <text x="660" y="368" class="code">@DyLibInterface</text>
   <text x="660" y="386" class="code">public protocol Trick</text>
@@ -83,20 +98,20 @@
        share a lane to DyLibRuntimeLoader and to TrickInterface; Dog reaches
        DyLibRuntimeLoader and AnimalInterface around the right side and over the top.
        Arcs mark crossings that are not junctions. -->
-  <path d="M80,506 L80,402" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <path d="M270,506 L270,402" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <path d="M400,506 L400,402" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <path d="M520,506 L520,402" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <path d="M600,506 L600,402" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <path d="M780,506 L780,402" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <path d="M320,506 L320,460 L276,460 A6,6 0 0 0 264,460 L160,460 L160,402" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <path d="M380,790 L300,790 L300,460" fill="none" stroke="#047857" stroke-width="1.5"/>
-  <circle cx="300" cy="460" r="2.5" fill="#047857"/>
-  <path d="M540,506 L540,460 L594,460 A6,6 0 0 1 606,460 L700,460 L700,402" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <path d="M562,724 L562,460" fill="none" stroke="#047857" stroke-width="1.5"/>
-  <circle cx="562" cy="460" r="2.5" fill="#047857"/>
-  <path d="M818,590 L846,590 L846,278 L410,278 L410,322" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
-  <path d="M818,610 L858,610 L858,262 L200,262 L200,322" fill="none" stroke="#047857" stroke-width="1.5" marker-end="url(#arrSolid)"/>
+  <path d="M80,506 L80,402" fill="none" stroke="#1e293b" stroke-width="1.5" marker-end="url(#arr-rt)"/>
+  <path d="M270,506 L270,402" fill="none" stroke="#0072b2" stroke-width="1.5" marker-end="url(#arr-an)"/>
+  <path d="M400,506 L400,402" fill="none" stroke="#0072b2" stroke-width="1.5" marker-end="url(#arr-an)"/>
+  <path d="M520,506 L520,402" fill="none" stroke="#cc79a7" stroke-width="2" marker-end="url(#arr-dl)"/>
+  <path d="M600,506 L600,402" fill="none" stroke="#cc79a7" stroke-width="2" marker-end="url(#arr-dl)"/>
+  <path d="M780,506 L780,402" fill="none" stroke="#009e73" stroke-width="1.5" marker-end="url(#arr-tr)"/>
+  <path d="M320,506 L320,460 L276,460 A6,6 0 0 0 264,460 L160,460 L160,402" fill="none" stroke="#1e293b" stroke-width="1.5" marker-end="url(#arr-rt)"/>
+  <path d="M380,790 L300,790 L300,460" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+  <circle cx="300" cy="460" r="2.5" fill="#1e293b"/>
+  <path d="M540,506 L540,460 L594,460 A6,6 0 0 1 606,460 L700,460 L700,402" fill="none" stroke="#009e73" stroke-width="1.5" marker-end="url(#arr-tr)"/>
+  <path d="M562,724 L562,460" fill="none" stroke="#009e73" stroke-width="1.5"/>
+  <circle cx="562" cy="460" r="2.5" fill="#009e73"/>
+  <path d="M818,590 L846,590 L846,278 L410,278 L410,322" fill="none" stroke="#0072b2" stroke-width="1.5" marker-end="url(#arr-an)"/>
+  <path d="M818,610 L858,610 L858,262 L200,262 L200,322" fill="none" stroke="#1e293b" stroke-width="1.5" marker-end="url(#arr-rt)"/>
 
   <rect x="456" y="300" width="378" height="18" fill="#ecfdf5"/>
   <text x="830" y="313" fill="#047857" class="h" font-size="13" text-anchor="end">Dynamically LINKED: dyld loads these before main()</text>
