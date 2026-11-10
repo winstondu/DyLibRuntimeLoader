@@ -36,6 +36,8 @@ print(DogPlugin.instance.speak())   // AnimalImplementation.framework is dlopen'
 
 Apps can use another binary in three ways. **Static linking** copies the code into the executable. **Dynamic linking** records the framework as a load command, so dyld maps, rebases, and binds it *before `main()`* on every launch whether or not the session uses it. **Dynamic loading** asks for the image later with `dlopen`, only when a feature needs it.
 
+![Static and dynamic linking both pay for a feature before main(), on every launch, whether or not the session uses it](docs/diagrams/the-problem.svg)
+
 Dynasty builds on the third. The app links only small **interface modules** (protocols) and the runtime. Concrete implementations live in frameworks that are *embedded* in the bundle but *not linked*, and they are opened the first time someone calls into them.
 
 ![Linked vs. loaded: interfaces are linked at launch, implementations are embedded but loaded on first use](docs/diagrams/architecture.svg)
@@ -237,22 +239,26 @@ enum DogPlugin {}
 
 ### How the app packages interfaces vs. implementations
 
-Both kinds of framework end up in the same place, `YourApp.app/Frameworks/`, signed with the app. What differs is whether the app binary *references* them. Embedding copies a framework into the bundle; linking adds an `LC_LOAD_DYLIB` load command that makes dyld open it before `main()`. Interfaces get both. Implementations get only the first.
+Every framework ends up in the same place, `YourApp.app/Frameworks/`, signed with the app. What differs is whether the app binary *references* it. Embedding copies a framework into the bundle; linking adds an `LC_LOAD_DYLIB` load command that makes dyld open it before `main()`. The app links only what its own code uses. Everything else is embedded only, and loads when a plugin that needs it is opened.
 
-| | Interface modules and the runtime | Implementations (plugins) |
-| --- | --- | --- |
-| Examples in the demo | `Dynasty`, `AnimalInterface`, `TrickInterface`, `DemoLogging` | `CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation` |
-| How it enters the project | Swift package with a `.dynamic` library product, or a framework target in the app project (`DemoLogging`) | Framework target in the app project (or a prebuilt `.xcframework`) |
-| Link Binary With Libraries | **Yes** | **No** |
-| Embed Frameworks (Code Sign On Copy) | Yes | Yes |
-| `import`ed by app code | Yes, the app calls the protocols | **Never**, the app names it only as a string in `@DyLibConnect(framework:)` |
-| Load command in the app binary | Yes | None (`otool -L` won't list it) |
-| When it is mapped | By dyld at launch, before `main()` | By `dlopen` on the first call through its connection |
-| If it is missing from the bundle | The app cannot launch | The app launches; that connection throws `failedToOpen` when used |
-| Copies per process | Exactly one, shared by the app and every plugin | One, opened once and reference-counted by `DyLibLoader` |
+| | Linked by the app | Plugin-only interfaces | Implementations (plugins) |
+| --- | --- | --- | --- |
+| Examples in the demo | `Dynasty`, `AnimalInterface`, `DemoLogging` | `TrickInterface` | `CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation` |
+| How it enters the project | Swift package with a `.dynamic` library product, or a framework target in the app project (`DemoLogging`) | Swift package with a `.dynamic` library product | Framework target in the app project (or a prebuilt `.xcframework`) |
+| Linked by the app | **Yes** | **No** (stripped with `-dead_strip_dylibs`, see below) | **No** |
+| Linked by plugins | By the plugins that use it | By the plugins that use it (Cat, Dog, Trick) | Never; plugins reach each other only through connections |
+| Embedded by the app (Code Sign On Copy) | Yes | Yes | Yes |
+| `import`ed by app code | Yes, the app calls these types | No | **Never**, the app names it only as a string in `@DyLibConnect(framework:)` |
+| Load command in the app binary | Yes | None | None (`otool -L` won't list it) |
+| When it is mapped | By dyld at launch, before `main()` | By dyld, as a dependency of the first plugin that links it (Run Cat or Run Dog) | By `dlopen` on the first call through its connection |
+| If it is missing from the bundle | The app cannot launch | The app launches; loading a plugin that needs it fails with `failedToOpen` | The app launches; that connection throws `failedToOpen` when used |
+| Copies per process | Exactly one, shared by the app and every plugin | Exactly one, shared by every plugin that links it | One, opened once and reference-counted by `DyLibLoader` |
+
+The middle column is any interface the app's own code never touches. Linking it from the app would only move its cost to launch. Leaving it embedded-only means a session that only taps **Run Mouse** never maps `TrickInterface` at all.
 
 A few details make this work:
 
+- **Embedding a package product without linking it.** Xcode passes every package product in a target's package dependencies to the linker, even if it isn't in *Link Binary With Libraries*, and the app has to keep the dependency so Embed Frameworks can copy it. So the app target sets `OTHER_LDFLAGS = -Wl,-dead_strip_dylibs`, which tells the linker to drop the load command of any dylib the binary uses no symbols from. Frameworks the app actually calls keep their load commands. `TrickInterface` loses its load command.
 - **Build order without linking.** The app target lists each implementation as a *target dependency* so Xcode builds it before the Embed Frameworks phase copies it, but the link phase never mentions it.
 - **Plugins link interfaces, never each other.** Each implementation links the interfaces it uses and the runtime, which is how it resolves `Animal`, `Trick`, and `DebugLogger` to the app's single copies through `@rpath` (`@executable_path/Frameworks`). Linking against a `.dynamic` product or a framework target records a load command but copies nothing, so the plugin doesn't carry its own interface copy. A plugin reaches another plugin only through a connection (`Dog` → `TrickImplementation`), never by linking it.
 - **Only the app embeds.** Plugins don't embed their dependencies. The app embeds every framework exactly once, which is [the golden rule](#the-golden-rule-one-copy-of-every-shared-module) applied to packaging.
@@ -261,12 +267,12 @@ A few details make this work:
 
 The [demo](Demo/DynamicLoadingDemo) shows the full setup:
 
-1. Add the runtime and each interface module as Swift packages (`AnimalInterface`, `TrickInterface`). They are `.dynamic` products, so they are **linked and embedded**. The shared `DebugLogger` lives in `DemoLogging`, a **framework target** in the app project that is also **linked and embedded** by the app. Being linked is what makes it an interface-side module, not how it is packaged.
+1. Add the runtime and each interface module as Swift packages (`AnimalInterface`, `TrickInterface`). They are `.dynamic` products. `Dynasty` and `AnimalInterface` are **linked and embedded** because the app uses them. `TrickInterface` is **embedded only**: the app's code never uses it, and `-dead_strip_dylibs` keeps it out of the app's load commands. The shared `DebugLogger` lives in `DemoLogging`, a **framework target** in the app project that is also **linked and embedded** by the app.
 2. Add each implementation as a **framework target** (`CatImplementation`, `MouseImplementation`, `DogImplementation`, `TrickImplementation`) that depends on its interface. `Cat` and `Dog` also depend on `TrickInterface` and link `DemoLogging.framework` (without embedding it) because they declare their own `Trick` connection.
 3. In the app target's **Embed Frameworks** build phase, add the implementation frameworks, but do **not** add them to *Link Binary With Libraries* and do not `import` them. This puts them in `YourApp.app/Frameworks/` with no load command in the app binary.
 4. Declare `@DyLibConnect(Animal.self, framework: "CatImplementation", logger: DebugLogger.self)` (and likewise for `Mouse` and `Dog`) and call through `instance`. `DyLibLibrary.framework(_:)` resolves `Frameworks/<Name>.framework/<Name>`, including the macOS `Contents/Frameworks` layout.
 
-The app's `Frameworks/` folder then contains `Dynasty`, `AnimalInterface`, `TrickInterface`, and `DemoLogging` (linked), plus `CatImplementation`, `MouseImplementation`, `DogImplementation`, and `TrickImplementation` (not linked; `otool -L` on the app binary never lists them). Nothing loads at launch. Tapping **Run Cat**, **Run Mouse**, or **Run Dog** performs that animal's first `dlopen`, and in Debug builds `DebugLogger` prints a line such as `[DyLib] Animal from CatImplementation in 12.06 ms (ok)`, followed by one for `Trick` when `Cat` or `Dog` speaks. A second tap is a cache hit and prints nothing.
+The app's `Frameworks/` folder then contains `Dynasty`, `AnimalInterface`, and `DemoLogging` (linked by the app), `TrickInterface` (embedded, linked only by plugins), plus `CatImplementation`, `MouseImplementation`, `DogImplementation`, and `TrickImplementation` (not linked; `otool -L` on the app binary never lists them). At launch only the three linked frameworks are mapped. Tapping **Run Cat**, **Run Mouse**, or **Run Dog** performs that animal's first `dlopen`, and in Debug builds `DebugLogger` prints a line such as `[DyLib] Animal from CatImplementation in 12.06 ms (ok)`, followed by one for `Trick` when `Cat` or `Dog` speaks. `TrickInterface` is mapped then, as a dependency of the Cat or Dog image. A second tap is a cache hit and prints nothing.
 
 To see the difference, delete `CatImplementation.framework` from a simulator build's `Frameworks/` folder and relaunch. The app starts normally and fails only when **Run Cat** is tapped. Delete `AnimalInterface.framework` and the app cannot launch at all.
 
