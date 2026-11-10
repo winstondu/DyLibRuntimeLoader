@@ -36,8 +36,6 @@ print(DogPlugin.instance.speak())   // AnimalImplementation.framework is dlopen'
 
 Apps can use another binary in three ways. **Static linking** copies the code into the executable. **Dynamic linking** records the framework as a load command, so dyld maps, rebases, and binds it *before `main()`* on every launch whether or not the session uses it. **Dynamic loading** asks for the image later with `dlopen`, only when a feature needs it.
 
-![Static and dynamic linking both pay for a feature before main(), on every launch, whether or not the session uses it](docs/diagrams/the-problem.svg)
-
 Dynasty builds on the third. The app links only small **interface modules** (protocols) and the runtime. Concrete implementations live in frameworks that are *embedded* in the bundle but *not linked*, and they are opened the first time someone calls into them.
 
 ![Linked vs. loaded: interfaces are linked at launch, implementations are embedded but loaded on first use](docs/diagrams/architecture.svg)
