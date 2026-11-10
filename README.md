@@ -1,5 +1,7 @@
 # Dynasty
 
+![Static and dynamic linking both pay for a feature before main(), on every launch, whether or not the session uses it](docs/diagrams/the-problem.svg)
+
 **Runtime dylib loading for Swift.**
 
 > Dynasty is based on [DyLibRuntimeLoader](https://github.com/duyquang91/DyLibRuntimeLoader) by Steve Dao ([@duyquang91](https://github.com/duyquang91)). See [Credits](#credits).
